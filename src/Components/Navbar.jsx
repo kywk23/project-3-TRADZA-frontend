@@ -1,4 +1,4 @@
-import { useState }  from 'react'
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -21,13 +21,16 @@ function Navbar() {
           <ul className={`md:flex space-x-4 ${isOpen ? "block" : "hidden"}`}>
             {/* Navigation links */}
             <li>
-              <a href="/landing">Home</a>
+              <a href="/categories">Home</a>
             </li>
             <li>
               <a href="/products">Products</a>
             </li>
             <li>
               <a href="/services">Services</a>
+            </li>
+            <li>
+              <a href="/add-listing">Add Listing</a>
             </li>
             <li>
               <a href="/login">Log In</a>
@@ -42,4 +45,4 @@ function Navbar() {
   );
 }
 
-export default Navbar
+export default Navbar;

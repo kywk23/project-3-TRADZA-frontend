@@ -1,17 +1,19 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import Landing from "./Components/Landing";
+import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Navbar from "./Components/Navbar";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Signup from "./Components/Signup";
-import Products from "./Components/Products";
-import Services from "./Components/Services";
+import ListingsPage from "./Components/Listings/ListingsPage";
+import IndividualListing from "./Components/Listings/IndividualListing";
+import AddListings from "./Components/Listings/AddListings";
 
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/landing",
-      element: <Landing />,
+      path: "/categories",
+      element: <Home />,
     },
     {
       path: "/login",
@@ -22,12 +24,16 @@ function App() {
       element: <Signup />,
     },
     {
-      path: "/products",
-      element: <Products />,
+      path: "/categories/electronics",
+      element: <ListingsPage />,
     },
     {
-      path: "/services",
-      element: <Services />,
+      path: "/listings/index",
+      element: <IndividualListing />,
+    },
+    {
+      path: "/add-listing",
+      element: <AddListings />,
     },
   ]);
   return (
