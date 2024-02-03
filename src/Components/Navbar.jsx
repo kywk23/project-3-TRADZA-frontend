@@ -21,22 +21,13 @@ function Navbar() {
           <ul className={`md:flex space-x-4 ${isOpen ? "block" : "hidden"}`}>
             {/* Navigation links */}
             <li>
-              <a href="/categories">Home</a>
+              <a href="/">Home</a>
             </li>
             <li>
-              <a href="/products">Products</a>
-            </li>
-            <li>
-              <a href="/services">Services</a>
+              <a href="/profile">Profile</a>
             </li>
             <li>
               <a href="/add-listing">Add Listing</a>
-            </li>
-            <li>
-              <a href="/login">Log In</a>
-            </li>
-            <li>
-              <a href="/signup">Sign Up</a>
             </li>
           </ul>
         </div>
