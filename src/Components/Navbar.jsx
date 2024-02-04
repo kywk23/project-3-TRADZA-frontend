@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { useAuth0 } from "@auth0/auth0-react";
+//components import
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useAuth0();
 
   return (
     <div>
@@ -21,14 +24,18 @@ function Navbar() {
           <ul className={`md:flex space-x-4 ${isOpen ? "block" : "hidden"}`}>
             {/* Navigation links */}
             <li>
-              <a href="/">Home</a>
+              <a href="/home">Home</a>
             </li>
-            <li>
-              <a href="/profile">Profile</a>
-            </li>
-            <li>
-              <a href="/add-listing">Add Listing</a>
-            </li>
+            {isAuthenticated && (
+              <>
+                <li>
+                  <a href="/add-listing">Add Listing</a>
+                </li>
+                <li>
+                  <a href="/profile">Profile</a>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </nav>

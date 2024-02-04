@@ -1,29 +1,46 @@
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+
+//Components import
+import AuthenticationButton from "./Profile/LogInSignUp/Buttons/AuthenticationButton";
+import SignUpButton from "./Profile/LogInSignUp/Buttons/SignUpButton";
+
 export default function Home() {
-  const categories = [
-    "electronics",
-    "household",
-    "books",
-    "repair",
-    "chores",
-    "tuition",
-  ];
+  //Auth0
+  const { isAuthenticated, isLoading, user } = useAuth0();
+
+  //
+  const categories = ["electronics", "household", "books", "repair", "chores", "tuition"];
 
   return (
     <>
-      <h4 className="flex justify-center py-4 text-3xl">Home Page</h4>
-      <div className="flex justify-center py-4 text-3xl">
-        <div className="grid grid-cols-2">
-          {categories.map((category, index) => (
-            <div
-              key={index}
-              className="flex justify-center items-center border border-black p-4 h-32"
-            >
-              <Link to={"/categories/electronics"}>{category}</Link>
-            </div>
-          ))}
-        </div>
+      <h1>Home Page (this is a placeholder) </h1>
+      {/* Displays Loading when the page is loading */}
+      <br />
+      {isAuthenticated && <p> Welcome, {user.name} </p>}
+      <br />
+      <div>
+        {categories.map((category, index) => (
+          <div key={index}>
+            <Link to={`/categories/${category.toLowerCase()}`}>{category}</Link>
+          </div>
+        ))}
       </div>
+      <br />
+      {/* Once user is logged in. Hide LogIn and Sign Up buttons.  */}
+      {isLoading
+        ? null
+        : !isAuthenticated && (
+            <>
+              <h2>Log in here: </h2>
+              <AuthenticationButton />
+              <br />
+              <br />
+              <h3>No Account? Sign up here:</h3>
+              <SignUpButton />
+              <br />
+            </>
+          )}
     </>
   );
 }
