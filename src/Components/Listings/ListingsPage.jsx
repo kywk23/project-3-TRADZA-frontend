@@ -25,7 +25,7 @@ export default function ListingsPage() {
   return (
     <div className="flex flex-col items-center py-1 text-3xl">
       <Link
-        to="/categories"
+        to="/home"
         className="inline-block text-blue-700 hover:text-blue-300 transition duration-300 ease-in-out py-4"
       >
         Back to Home
@@ -34,7 +34,7 @@ export default function ListingsPage() {
         {/* Render your UI based on the fetched data */}
         {listings.map((listing, index) => (
           <div key={index}>
-            <ListingCard />
+            <ListingCard listing={listing}/>
           </div>
         ))}
       </div>
