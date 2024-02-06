@@ -1,33 +1,49 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function AddListings() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [condition, setCondition] = useState("");
-  const [displayPicture, setDisplayPicture] = useState(null);
-  const [tradeLocation, setTradeLocation] = useState("");
+  const [newListing, setNewListing] = useState({
+    name: "",
+    description: "",
+    userId: 1,
+    numberOfLikes: 0,
+    condition: "New",
+    listingStatus: false,
+  });
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setDisplayPicture(file);
-  };
+  const handleChange = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Form Data:", {
-      name,
-      description,
-      condition,
-      displayPicture,
-      tradeLocation,
+    setNewListing((prevState) => {
+      return { ...prevState, [name]: value };
     });
-    setName("");
-    setDescription("");
-    setCondition("");
-    setDisplayPicture(null);
-    setTradeLocation("");
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    axios
+      .post(`${import.meta.env.VITE_SOME_BACKEND_URL}/listings`, newListing)
+      .then((response) => {
+        console.log(response);
+      });
+
+    setNewListing({
+      name: "",
+      description: "",
+      userId: "",
+      numberOfLikes: 0,
+      condition: "New",
+      listingStatus: false,
+    });
+  };
+
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setDisplayPicture(file);
+  // };
 
   return (
     <div className="flex flex-col items-center py-1">
@@ -45,16 +61,18 @@ export default function AddListings() {
           Listing Name:
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name="name"
+            value={newListing.name}
+            onChange={handleChange}
             className="w-full p-2 border rounded-md"
           />
         </label>
         <label className="block mb-2">
           Description:
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            name="description"
+            value={newListing.description}
+            onChange={handleChange}
             className="w-full p-2 border rounded-md"
           ></textarea>
         </label>
@@ -62,28 +80,20 @@ export default function AddListings() {
           Condition:
           <input
             type="text"
-            value={condition}
-            onChange={(e) => setCondition(e.target.value)}
+            name="condition"
+            value={newListing.condition}
+            onChange={handleChange}
             className="w-full p-2 border rounded-md"
           />
         </label>
-        <label className="block mb-2">
+        {/* <label className="block mb-2">
           Display Picture:
           <input
             type="file"
             onChange={(e) => handleFileChange(e)}
             className="w-full p-2 border rounded-md"
           />
-        </label>
-        <label className="block mb-2">
-          Trade at Where:
-          <input
-            type="text"
-            value={tradeLocation}
-            onChange={(e) => setTradeLocation(e.target.value)}
-            className="w-full p-2 border rounded-md"
-          />
-        </label>
+        </label> */}
         <div className="flex justify-center">
           <button
             type="submit"
