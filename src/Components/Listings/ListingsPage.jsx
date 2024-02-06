@@ -2,6 +2,7 @@ import ListingCard from "./ListingCard";
 import { Link } from "react-router-dom";
 
 export default function ListingsPage() {
+  
   return (
     <div className="flex flex-col items-center py-1 text-3xl">
       <Link
