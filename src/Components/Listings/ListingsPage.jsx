@@ -2,6 +2,7 @@ import ListingCard from "./ListingCard";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { BACKEND_URL } from "../../constants";
 
 export default function ListingsPage() {
   const [listings, setListings] = useState([]); // State to hold the fetched data
@@ -9,9 +10,7 @@ export default function ListingsPage() {
   // Function to fetch data
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_SOME_BACKEND_URL}/listings`
-      );
+      const response = await axios.get(`${BACKEND_URL}/listings`);
       setListings(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
