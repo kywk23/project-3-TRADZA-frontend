@@ -1,16 +1,73 @@
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { BACKEND_URL } from "../../constants";
 //Components import
 import AuthenticationButton from "./Profile/LogInSignUp/Buttons/AuthenticationButton";
 import SignUpButton from "./Profile/LogInSignUp/Buttons/SignUpButton";
 
 export default function Home() {
   //Auth0
-  const { isAuthenticated, isLoading, user } = useAuth0();
+  const { isAuthenticated, isLoading, user, getAccessTokenSilently } = useAuth0();
 
-  //
+  //States
+  const [userEmail, setUserEmail] = useState("");
+  // const [authToken, setAuthToken] = useState("");
+
+  //Arrays
   const categories = ["electronics", "household", "books", "repair", "chores", "tuition"];
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setUserEmail(user.email);
+      getAccessTokenSilently()
+        .then((res) =>
+          axios.post(
+            `${BACKEND_URL}/users`,
+            { email: userEmail },
+            {
+              headers: {
+                Authorization: `Bearer ${res}`,
+              },
+            }
+          )
+        )
+        .then((res) => console.log(res.data))
+        .catch((err) => console.log(err));
+    }
+  }, [getAccessTokenSilently, isAuthenticated, user, userEmail]);
+
+  //To get the user's email AFTER they first sign up and log in.
+  //   const checkUserEmail = async () => {
+  //   try {
+  //     const res = await axios.post(, { email: userEmail }, {
+  //       headers: {
+  //         Authorization: `Bearer ${authToken}`,
+  //       },
+  //     });
+  //     // Handle the response if needed
+  //     console.log("API Response:", res.data);
+  //   } catch (error) {
+  //     // Handle errors here
+  //     console.error("API Error:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (isAuthenticated) {
+  //       setUserEmail(user.email);
+  //       const fetchToken = await getAccessTokenSilently();
+  //       setAuthToken(fetchToken);
+  //       console.log("Current userEmail:", userEmail);
+  //       checkUserEmail();
+  //     }
+  //   };
+
+  //   fetchData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isAuthenticated, userEmail]);
 
   return (
     <>
