@@ -7,13 +7,14 @@ import LandingPage from "./Components/LandingPage";
 import Home from "./Components/Home";
 import Navbar from "./Components/Navbar";
 //Listing Pages
-import ListingsPage from "./Components/Listings/ListingsPage";
-import IndividualListing from "./Components/Listings/IndividualListing";
-import AddListings from "./Components/Listings/AddListings";
+import ListingsPage from "./Components/Listing/ListingsPage";
+import IndividualListing from "./Components/Listing/IndividualListing";
+import AddListings from "./Components/Listing/AddListings";
 //Profile Pages
 import ProfileMainPage from "./Components/Profile/ProfileMainPage";
 import ProfileEdit from "./Components/Profile/ProfileEdit";
 import ProfileFirstTimeUpdate from "./Components/Profile/ProfileFirstTimeUpdate";
+import TradeRoom from "./Components/Trade/TradeRoom";
 
 function App() {
   const router = createBrowserRouter([
@@ -44,16 +45,22 @@ function App() {
 
     //Listing Pages
     {
-      path: "/categories/electronics",
+      path: "/categories/:category",
       element: <ListingsPage />,
     },
     {
-      path: "/listings/index",
+      path: "/listings/:id",
       element: <IndividualListing />,
     },
     {
       path: "/add-listing",
       element: <AddListings />,
+    },
+
+    //Trade Room
+    {
+      path: "/traderoom/:traderoomId",
+      element: <TradeRoom />,
     },
   ]);
   return (
