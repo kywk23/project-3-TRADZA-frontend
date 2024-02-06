@@ -11,6 +11,7 @@ const SignUpButton = () => {
           authorizationParams: {
             screen_hint: "signup",
           },
+          redirectUri: `${window.location.origin}/firstsignup`,
         })
       }
     >
