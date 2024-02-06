@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useState } from "react";
 
 //Components import
 import AuthenticationButton from "./Profile/LogInSignUp/Buttons/AuthenticationButton";
@@ -8,9 +9,18 @@ import SignUpButton from "./Profile/LogInSignUp/Buttons/SignUpButton";
 export default function Home() {
   //Auth0
   const { isAuthenticated, isLoading, user } = useAuth0();
+  // const [categories, setCategories] = useState([])
 
   //Arrays
-  const categories = ["electronics", "household", "books", "repair", "chores", "tuition"];
+  //API CALL: Fetch all categories
+  const categories = [
+    "electronics",
+    "household",
+    "books",
+    "repair",
+    "chores",
+    "tuition",
+  ];
 
   return (
     <>

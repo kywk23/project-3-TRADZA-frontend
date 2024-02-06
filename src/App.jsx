@@ -44,11 +44,11 @@ function App() {
 
     //Listing Pages
     {
-      path: "/categories/electronics",
+      path: "/categories/:category",
       element: <ListingsPage />,
     },
     {
-      path: "/listings/index",
+      path: "/listings/:id",
       element: <IndividualListing />,
     },
     {
