@@ -6,11 +6,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LandingPage from "./Components/LandingPage";
 import Home from "./Components/Home";
 import Navbar from "./Components/Navbar";
-import ProfileMainPage from "./Components/Profile/ProfileMainPage";
+//Listing Pages
 import ListingsPage from "./Components/Listings/ListingsPage";
 import IndividualListing from "./Components/Listings/IndividualListing";
 import AddListings from "./Components/Listings/AddListings";
+//Profile Pages
+import ProfileMainPage from "./Components/Profile/ProfileMainPage";
 import ProfileEdit from "./Components/Profile/ProfileEdit";
+import ProfileFirstTimeUpdate from "./Components/Profile/ProfileFirstTimeUpdate";
 
 function App() {
   const router = createBrowserRouter([
@@ -23,6 +26,10 @@ function App() {
     {
       path: "/home",
       element: <Home />,
+    },
+    {
+      path: "/firstsignup",
+      element: <ProfileFirstTimeUpdate />,
     },
 
     //Profile Pages
