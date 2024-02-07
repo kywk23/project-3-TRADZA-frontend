@@ -4,10 +4,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 //Components import
 import AuthenticationButton from "./Profile/LogInSignUp/Buttons/AuthenticationButton";
 import SignUpButton from "./Profile/LogInSignUp/Buttons/SignUpButton";
+import { useUserId } from "./Users/GetCurrentUser";
 
 export default function Home() {
   //Auth0
-  const { isAuthenticated, isLoading, user } = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
+  const { userFirstName } = useUserId();
 
   //Arrays
   const categories = ["electronics", "household", "books", "repair", "chores", "tuition"];
@@ -17,7 +19,7 @@ export default function Home() {
       <h1>Home Page (this is a placeholder) </h1>
       {/* Displays Loading when the page is loading */}
       <br />
-      {isAuthenticated && <p> Welcome, {user.name} </p>}
+      {isAuthenticated && userFirstName && <p> Welcome, {userFirstName} </p>}
       <br />
       <div>
         {categories.map((category, index) => (
