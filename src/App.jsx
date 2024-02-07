@@ -10,6 +10,7 @@ import Navbar from "./Components/Navbar";
 import ListingsPage from "./Components/Listing/ListingsPage";
 import IndividualListing from "./Components/Listing/IndividualListing";
 import AddListings from "./Components/Listing/AddListings";
+import UserListings from "./Components/Listings/UserListings";
 //Profile Pages
 import ProfileMainPage from "./Components/Profile/ProfileMainPage";
 import ProfileEdit from "./Components/Profile/ProfileEdit";
@@ -36,7 +37,6 @@ function App() {
       path: "/firstsignup",
       element: <ProfileFirstTimeUpdate />,
     },
-
     //Profile Pages
     {
       path: "/profile",
@@ -46,10 +46,14 @@ function App() {
       path: "/profile/edit",
       element: <ProfileEdit />,
     },
-
     //Listing Pages
     {
+      path: "/mylistings",
+      element: <UserListings />,
+    },
+    {
       path: "/categories/:category",
+
       element: <ListingsPage />,
     },
     {

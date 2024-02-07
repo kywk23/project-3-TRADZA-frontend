@@ -29,6 +29,9 @@ function Navbar() {
             {isAuthenticated && (
               <>
                 <li>
+                  <a href="/mylistings">My Listings</a>
+                </li>
+                <li>
                   <a href="/add-listing">Add Listing</a>
                 </li>
                 <li>

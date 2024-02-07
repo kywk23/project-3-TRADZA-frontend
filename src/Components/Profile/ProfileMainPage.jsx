@@ -3,15 +3,18 @@ import { Link } from "react-router-dom";
 
 //Component imports
 import LogOutButton from "./LogInSignUp/Buttons/LogOutButton";
+import { useUserId } from "../Users/GetCurrentUser";
 
 function ProfileMainPage() {
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated } = useAuth0();
+  const { currentUser } = useUserId();
 
   return (
     <div>
       <h1>Profile - Main Page</h1>
       <br />
-      {isAuthenticated && <p> Hello! {user.name}</p>}
+
+      {currentUser && <h2> Hello ! {currentUser.firstName} </h2>}
       <br />
       <div>
         <li>

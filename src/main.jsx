@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { Auth0Provider } from "@auth0/auth0-react";
+import GetCurrentUser from "./Components/Users/GetCurrentUser.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Auth0Provider
@@ -12,6 +13,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       scope: "read:current_user update:current_user_metadata openid profile email",
     }}
   >
-    <App />
+    <GetCurrentUser>
+      <App />
+    </GetCurrentUser>
   </Auth0Provider>
 );
