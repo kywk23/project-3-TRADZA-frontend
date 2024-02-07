@@ -15,6 +15,10 @@ import ProfileMainPage from "./Components/Profile/ProfileMainPage";
 import ProfileEdit from "./Components/Profile/ProfileEdit";
 import ProfileFirstTimeUpdate from "./Components/Profile/ProfileFirstTimeUpdate";
 import TradeRoom from "./Components/Trade/TradeRoom";
+import InitiateTrade from "./Components/Trade/InitiateTrade";
+import AllUserTrades from "./Components/Trade/AllUserTrades";
+import InitiatorPendingTrade from "./Components/Trade/InitiatorPendingTrade";
+import AcceptorPendingTrade from "./Components/Trade/AcceptorPendingTrade";
 
 function App() {
   const router = createBrowserRouter([
@@ -61,6 +65,22 @@ function App() {
     {
       path: "/traderoom/:traderoomId",
       element: <TradeRoom />,
+    },
+    {
+      path: "/initiate-trade",
+      element: <InitiateTrade />,
+    },
+    {
+      path: "/user-trades",
+      element: <AllUserTrades />,
+    },
+    {
+      path: "/user-trades/pending/initiator",
+      element: <InitiatorPendingTrade />,
+    },
+    {
+      path: "/user-trades/pending/acceptor",
+      element: <AcceptorPendingTrade />,
     },
   ]);
   return (
