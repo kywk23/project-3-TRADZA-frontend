@@ -10,7 +10,7 @@ import Navbar from "./Components/Navbar";
 import ListingsPage from "./Components/Listing/ListingsPage";
 import IndividualListing from "./Components/Listing/IndividualListing";
 import AddListings from "./Components/Listing/AddListings";
-import UserListings from "./Components/Listings/UserListings";
+import UserListings from "./Components/Listing/UserListings";
 //Profile Pages
 import ProfileMainPage from "./Components/Profile/ProfileMainPage";
 import ProfileEdit from "./Components/Profile/ProfileEdit";
