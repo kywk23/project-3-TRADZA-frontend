@@ -12,16 +12,25 @@ function ProfileEdit() {
   const [displayPicture, setDisplayPicture] = useState("");
   const [area, setArea] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const [address, setAddress] = useState([]);
   //
   const { currentUser } = useUserId();
   const userId = currentUser.id;
   const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
-    setMobileNumber(currentUser.mobileNumber);
-    //setArea incomplete. needs .get from address model
-    setArea();
-  }, [currentUser]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/users/address/${userId}`);
+        setAddress(response.data);
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
 
   const handleChange = (event) => {
     switch (event.target.name) {
@@ -55,30 +64,30 @@ function ProfileEdit() {
         },
       }
     );
-    console.log(response);
+    console.log(`phone num updated`, response);
   };
 
-  // const updateArea = async () => {
-  //   const token = await getAccessTokenSilently();
-  //   const response = await axios.put(
-  //     `${BACKEND_URL}/users/edit/address/area/${userId}`,
-  //     {
-  //       area: area,
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   );
-  //   console.log(response);
-  // };
+  const updateAddress = async () => {
+    const token = await getAccessTokenSilently();
+    const response = await axios.put(
+      `${BACKEND_URL}/users/edit/address/${userId}`,
+      {
+        area: area,
+        zipCode: zipCode,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(`address updated`, response);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     updateMobileNumber(mobileNumber);
-    // updateArea(area);
-    // updateDisplayPicture
+    updateAddress(area, zipCode);
   };
 
   return (
@@ -89,18 +98,33 @@ function ProfileEdit() {
       <form onSubmit={handleSubmit}>
         <br />
         <label>
-          Mobile Number:
-          <input name="mobileNumber" type="number" value={mobileNumber} onChange={handleChange} />
+          <p>Your Mobile Number: {currentUser.mobileNumber} </p>
+          <input
+            name="mobileNumber"
+            type="number"
+            value={mobileNumber}
+            onChange={handleChange}
+            placeholder="New number put here ah"
+          />
         </label>
         <br />
         <label>
-          Display Picture:
+          <p> Display Picture: </p>
           <input name="displayPicture" type="url" value={displayPicture} onChange={handleChange} />
         </label>
         <br />
         <br />
         {/* Address Edits */}
-        <h2>Address</h2>
+        <h2>Your currrent Address is:</h2>
+        <ul>
+          {address.map((address) => (
+            <li key={address.id}>
+              <strong>Area:</strong> {address.area} <br />
+              <strong>Zip Code:</strong> {address.zipCode}
+            </li>
+          ))}
+        </ul>
+        <br />
         <label>
           Area:
           <input name="area" type="text" value={area} onChange={handleChange} />
@@ -111,7 +135,8 @@ function ProfileEdit() {
           <input name="zipCode" type="number" value={zipCode} onChange={handleChange} />
         </label>
         <br />
-        <input type="submit" value="Edit Profile BUTTON" />
+        <br />
+        <input type="submit" value="Update Profile BUTTON" />
       </form>
     </div>
   );

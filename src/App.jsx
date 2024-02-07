@@ -10,11 +10,12 @@ import Navbar from "./Components/Navbar";
 import ListingsPage from "./Components/Listing/ListingsPage";
 import IndividualListing from "./Components/Listing/IndividualListing";
 import AddListings from "./Components/Listing/AddListings";
-import UserListings from "./Components/Listings/UserListings";
+import UserListings from "./Components/Listing/UserListings";
 //Profile Pages
 import ProfileMainPage from "./Components/Profile/ProfileMainPage";
 import ProfileEdit from "./Components/Profile/ProfileEdit";
 import ProfileFirstTimeUpdate from "./Components/Profile/ProfileFirstTimeUpdate";
+//Trade Pages
 import TradeRoom from "./Components/Trade/TradeRoom";
 import InitiateTrade from "./Components/Trade/InitiateTrade";
 import AllUserTrades from "./Components/Trade/AllUserTrades";
@@ -53,7 +54,6 @@ function App() {
     },
     {
       path: "/categories/:category",
-
       element: <ListingsPage />,
     },
     {
