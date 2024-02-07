@@ -7,12 +7,14 @@ import { useUserId } from "../Users/GetCurrentUser";
 
 function ProfileMainPage() {
   const { isAuthenticated } = useAuth0();
-  const { userFirstName } = useUserId();
+  const { currentUser } = useUserId();
+
   return (
     <div>
       <h1>Profile - Main Page</h1>
       <br />
-      {isAuthenticated && <p> Hello! {userFirstName}</p>}
+
+      {currentUser && <h2> Hello ! {currentUser.firstName} </h2>}
       <br />
       <div>
         <li>
