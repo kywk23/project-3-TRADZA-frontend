@@ -5,32 +5,44 @@ import { useAuth0 } from "@auth0/auth0-react";
 //Components import
 import { BACKEND_URL } from "../../../constants";
 import { useUserId } from "../Users/GetCurrentUser";
+import ImageUpload from "../Upload/ImageUpload";
 
 function ProfileEdit() {
   //states
   const [mobileNumber, setMobileNumber] = useState("");
-  const [displayPicture, setDisplayPicture] = useState("");
   const [area, setArea] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [address, setAddress] = useState([]);
+  const [displayPicture, setDisplayPicture] = useState(null);
   //
   const { currentUser } = useUserId();
   const userId = currentUser.id;
   const { getAccessTokenSilently } = useAuth0();
 
+  //To fetch Address on userid
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/users/address/${userId}`);
-        setAddress(response.data);
-        console.log(response);
+        if (userId) {
+          const response = await axios.get(`${BACKEND_URL}/users/address/${userId}`);
+          setAddress(response.data);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, [userId]);
+
+  //To render in input fields
+  useEffect(() => {
+    setMobileNumber(currentUser.mobileNumber);
+    console.log(`address is`, address);
+    if (address.length > 0) {
+      setArea(address[0].area);
+      setZipCode(address[0].zipCode);
+    }
+  }, [address, currentUser]);
 
   const handleChange = (event) => {
     switch (event.target.name) {
@@ -38,7 +50,7 @@ function ProfileEdit() {
         setMobileNumber(event.target.value);
         break;
       case "displayPicture":
-        setDisplayPicture(event.target.value);
+        setDisplayPicture(event.target.files[0]);
         break;
       case "area":
         setArea(event.target.value);
@@ -98,7 +110,9 @@ function ProfileEdit() {
       <form onSubmit={handleSubmit}>
         <br />
         <label>
-          <p>Your Mobile Number: {currentUser.mobileNumber} </p>
+          <p>
+            <strong>Your Mobile Number: </strong>
+          </p>
           <input
             name="mobileNumber"
             type="number"
@@ -110,20 +124,22 @@ function ProfileEdit() {
         <br />
         <label>
           <p> Display Picture: </p>
-          <input name="displayPicture" type="url" value={displayPicture} onChange={handleChange} />
+          <ImageUpload file={displayPicture} />
         </label>
         <br />
         <br />
         {/* Address Edits */}
-        <h2>Your currrent Address is:</h2>
-        <ul>
+        <h2>
+          <strong>Your currrent Address is:</strong>
+        </h2>
+        {/* <ul>
           {address.map((address) => (
             <li key={address.id}>
               <strong>Area:</strong> {address.area} <br />
               <strong>Zip Code:</strong> {address.zipCode}
             </li>
           ))}
-        </ul>
+        </ul> */}
         <br />
         <label>
           Area:
