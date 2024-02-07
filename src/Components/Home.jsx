@@ -5,29 +5,25 @@ import { useState } from "react";
 //Components import
 import AuthenticationButton from "./Profile/LogInSignUp/Buttons/AuthenticationButton";
 import SignUpButton from "./Profile/LogInSignUp/Buttons/SignUpButton";
+import { useUserId } from "./Users/GetCurrentUser";
 
 export default function Home() {
   //Auth0
-  const { isAuthenticated, isLoading, user } = useAuth0();
-  // const [categories, setCategories] = useState([])
+
+  const { userFirstName } = useUserId();
+  const { isAuthenticated, isLoading } = useAuth0();
 
   //Arrays
+
   //API CALL: Fetch all categories
-  const categories = [
-    "electronics",
-    "household",
-    "books",
-    "repair",
-    "chores",
-    "tuition",
-  ];
+  const categories = ["electronics", "household", "books", "repair", "chores", "tuition"];
 
   return (
     <>
       <h1>Home Page (this is a placeholder) </h1>
       {/* Displays Loading when the page is loading */}
       <br />
-      {isAuthenticated && <p> Welcome, {user.name} </p>}
+      {isAuthenticated && userFirstName && <p> Welcome, {userFirstName} </p>}
       <br />
       <div>
         {categories.map((category, index) => (
