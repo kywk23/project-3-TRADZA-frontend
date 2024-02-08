@@ -31,13 +31,29 @@ export default function IndividualListing() {
       >
         Back to Listings
       </Link>
-      <div className="flex flex-col items-center max-w-4xl mx-auto p-5 bg-gray-200 rounded-lg shadow">
-        <h1>Listing: </h1>
-        <h1 className="text-xl font-semibold text-gray-700">{listing.name}</h1>
-        <h1 className="my-2">Description: </h1>
-        <h1 className="text-xl font-semibold text-gray-700">
-          {listing.description}
-        </h1>
+      <div className="flex flex-col items-center max-w-4xl p-5 bg-gray-200 rounded-lg shadow">
+        <div className="flex flex-col items-center my-2">
+          <h1 className="my-2">Listing ID: </h1>
+          <h1 className="text-xl font-semibold text-gray-700">{listing.id}</h1>
+        </div>
+        <div className="my-2">
+          <h1>Listing: </h1>
+          <h1 className="text-xl font-semibold text-gray-700 mx-auto">
+            {listing.name}
+          </h1>
+        </div>
+        <div className="flex flex-col items-center my-2">
+          <h1 className="my-2">Description: </h1>
+          <h1 className="text-xl font-semibold text-gray-700">
+            {listing.description}
+          </h1>
+        </div>
+        <div className="flex flex-col items-center my-2">
+          <h1 className="my-2">Listed by User: </h1>
+          <h1 className="text-xl font-semibold text-gray-700">
+            {listing.userId}
+          </h1>
+        </div>
         <Button
           style={{ margin: "1rem", backgroundColor: "darkcyan" }}
           onClick={handleClick}

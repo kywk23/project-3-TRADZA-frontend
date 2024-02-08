@@ -7,11 +7,10 @@ import { BACKEND_URL } from "../../constants";
 //Components import
 import AuthenticationButton from "./Profile/LogInSignUp/Buttons/AuthenticationButton";
 import SignUpButton from "./Profile/LogInSignUp/Buttons/SignUpButton";
-import { useUserId } from "./Users/GetCurrentUser";
 
 export default function Home() {
   //Auth0
-  const { userFirstName } = useUserId();
+
   const { isAuthenticated, isLoading } = useAuth0();
   
   const [categories, setCategories] = useState([]);
@@ -33,8 +32,7 @@ export default function Home() {
     <>
       <h1>Home Page (this is a placeholder) </h1>
       {/* Displays Loading when the page is loading */}
-      <br />
-      {isAuthenticated && userFirstName && <p> Welcome, {userFirstName} </p>}
+
       <br />
       <div>
         {categories.map((category, index) => (

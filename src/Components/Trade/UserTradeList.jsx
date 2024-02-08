@@ -1,18 +1,12 @@
-import { useParams } from "react-router-dom";
 import { useState } from "react";
 
 export default function UserTradeList() {
-  const [userListings, setUserListings] = useState([
-    "Bag",
-    "Clothes",
-    "Wallet",
-  ]);
+  const [userListings, setUserListings] = useState(["Bag", "Clothes", "Wallet"]);
   const [user, setUser] = useState({
     id: 1,
     email: "test@gmail.com",
     firstName: "Jack",
   });
-  const { userId } = useParams;
 
   //API Call: Get user details and UnSold userListings based on userId
 
