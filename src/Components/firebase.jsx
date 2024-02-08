@@ -14,3 +14,5 @@ const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 
 export const DB_STORAGE_PP_KEY = "profile-picture/";
+export const DB_STORAGE_LISTING_IMAGES_KEY = "listing-pictures/";
+export const DB_STORAGE_CHAT_IMAGES_KEY = "chat-images/";

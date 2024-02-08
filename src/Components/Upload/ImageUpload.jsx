@@ -9,6 +9,10 @@ function ImageUpload() {
   const [displayPictureUrl, setDisplayPictureUrl] = useState("");
   const [fileValue, setFileValue] = useState(null);
 
+  // upload image to firebase
+  // take url (downloadUrl) => .post to postgre (display pic model)
+  //.get from postgre; tracking where user_id == user_id .
+  //render all
   useEffect(() => {
     const fetchDisplayPicture = async () => {
       try {
@@ -33,8 +37,9 @@ function ImageUpload() {
         getDownloadURL(storageRefInstance)
       );
       console.log(fileValue);
+      console.log(`getDownloadurl`, getDownloadURL);
       setDisplayPictureUrl(url);
-      console.log(url);
+      console.log(`url`, url);
     } catch (error) {
       console.error("Error uploading image:", error);
     }

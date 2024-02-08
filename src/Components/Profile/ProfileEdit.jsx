@@ -64,7 +64,7 @@ function ProfileEdit() {
 
   const updateMobileNumber = async () => {
     const token = await getAccessTokenSilently();
-    console.log(token);
+
     const response = await axios.put(
       `${BACKEND_URL}/users/edit/mobile/${userId}`,
       {
@@ -124,6 +124,7 @@ function ProfileEdit() {
         <br />
         <label>
           <p> Display Picture: </p>
+          {/* this is a component  */}
           <ImageUpload />
         </label>
         <br />
