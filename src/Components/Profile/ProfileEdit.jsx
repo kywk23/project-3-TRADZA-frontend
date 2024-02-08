@@ -124,7 +124,7 @@ function ProfileEdit() {
         <br />
         <label>
           <p> Display Picture: </p>
-          <ImageUpload file={displayPicture} />
+          <ImageUpload />
         </label>
         <br />
         <br />
