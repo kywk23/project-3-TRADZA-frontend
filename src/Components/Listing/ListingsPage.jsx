@@ -9,6 +9,7 @@ export default function ListingsPage() {
   const [listings, setListings] = useState([]);
   let { category } = useParams();
 
+  //API Call: Get from Listings Table, filter by categories
   const fetchAllListings = async () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/listings`);
