@@ -1,17 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import Select from "react-select";
+import { BACKEND_URL } from "../../../constants";
+import { list } from "postcss";
 
 export default function AddListings() {
   const [newListing, setNewListing] = useState({
     name: "",
     description: "",
-    userId: 1,
+    userId: 4,
     numberOfLikes: 0,
     condition: "New",
     listingStatus: false,
   });
+  const [allCategories, setAllCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${BACKEND_URL}/categories`).then((response) => {
+      setAllCategories(response.data);
+    });
+  }, []);
+
+  const categoryOptions = allCategories.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }));
+
+  const handleSelectChange = (selected) => {
+    setSelectedCategories(selected);
+  };
 
   const handleChange = (e) => {
     let name = e.target.name;
@@ -25,11 +44,23 @@ export default function AddListings() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios
-      .post(`${import.meta.env.VITE_SOME_BACKEND_URL}/listings`, newListing)
+    const categoriesToSubmit = selectedCategories.map(
+      (category) => category.value
+    );
+
+    axios.post(`${BACKEND_URL}/listings`, newListing).then((response) => {
+      const listingId = response.data.id;
+      return axios.post(
+        `${BACKEND_URL}/categories/create-listings-categories`,
+        {
+          listingId: listingId,
+          categories: categoriesToSubmit,
+        }
+      )
       .then((response) => {
-        console.log(response);
-      });
+        console.log(response)
+      })
+    });
 
     setNewListing({
       name: "",
@@ -87,6 +118,16 @@ export default function AddListings() {
             className="w-full p-2 border rounded-md"
           />
         </label>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Category
+          </label>
+          <Select
+            isMulti
+            options={categoryOptions}
+            onChange={handleSelectChange}
+          />
+        </div>
         {/* <label className="block mb-2">
           Display Picture:
           <input
