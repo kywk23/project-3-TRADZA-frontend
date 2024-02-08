@@ -15,6 +15,7 @@ import UserListings from "./Components/Listing/UserListings";
 import ProfileMainPage from "./Components/Profile/ProfileMainPage";
 import ProfileEdit from "./Components/Profile/ProfileEdit";
 import ProfileFirstTimeUpdate from "./Components/Profile/ProfileFirstTimeUpdate";
+//Trade Pages
 import TradeRoom from "./Components/Trade/TradeRoom";
 import InitiateTrade from "./Components/Trade/InitiateTrade";
 import AllUserTrades from "./Components/Trade/AllUserTrades";
@@ -53,7 +54,6 @@ function App() {
     },
     {
       path: "/categories/:category",
-
       element: <ListingsPage />,
     },
     {

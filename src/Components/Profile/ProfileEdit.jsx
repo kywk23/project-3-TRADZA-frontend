@@ -5,23 +5,44 @@ import { useAuth0 } from "@auth0/auth0-react";
 //Components import
 import { BACKEND_URL } from "../../../constants";
 import { useUserId } from "../Users/GetCurrentUser";
+import ImageUpload from "../Upload/ImageUpload";
 
 function ProfileEdit() {
   //states
   const [mobileNumber, setMobileNumber] = useState("");
-  const [displayPicture, setDisplayPicture] = useState("");
   const [area, setArea] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const [address, setAddress] = useState([]);
+  const [displayPicture, setDisplayPicture] = useState(null);
   //
   const { currentUser } = useUserId();
   const userId = currentUser.id;
   const { getAccessTokenSilently } = useAuth0();
 
+  //To fetch Address on userid
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (userId) {
+          const response = await axios.get(`${BACKEND_URL}/users/address/${userId}`);
+          setAddress(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [userId]);
+
+  //To render in input fields
   useEffect(() => {
     setMobileNumber(currentUser.mobileNumber);
-    //setArea incomplete. needs .get from address model
-    setArea();
-  }, [currentUser]);
+    console.log(`address is`, address);
+    if (address.length > 0) {
+      setArea(address[0].area);
+      setZipCode(address[0].zipCode);
+    }
+  }, [address, currentUser]);
 
   const handleChange = (event) => {
     switch (event.target.name) {
@@ -29,7 +50,7 @@ function ProfileEdit() {
         setMobileNumber(event.target.value);
         break;
       case "displayPicture":
-        setDisplayPicture(event.target.value);
+        setDisplayPicture(event.target.files[0]);
         break;
       case "area":
         setArea(event.target.value);
@@ -43,7 +64,7 @@ function ProfileEdit() {
 
   const updateMobileNumber = async () => {
     const token = await getAccessTokenSilently();
-    console.log(token);
+
     const response = await axios.put(
       `${BACKEND_URL}/users/edit/mobile/${userId}`,
       {
@@ -55,30 +76,30 @@ function ProfileEdit() {
         },
       }
     );
-    console.log(response);
+    console.log(`phone num updated`, response);
   };
 
-  // const updateArea = async () => {
-  //   const token = await getAccessTokenSilently();
-  //   const response = await axios.put(
-  //     `${BACKEND_URL}/users/edit/address/area/${userId}`,
-  //     {
-  //       area: area,
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   );
-  //   console.log(response);
-  // };
+  const updateAddress = async () => {
+    const token = await getAccessTokenSilently();
+    const response = await axios.put(
+      `${BACKEND_URL}/users/edit/address/${userId}`,
+      {
+        area: area,
+        zipCode: zipCode,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(`address updated`, response);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     updateMobileNumber(mobileNumber);
-    // updateArea(area);
-    // updateDisplayPicture
+    updateAddress(area, zipCode);
   };
 
   return (
@@ -89,18 +110,38 @@ function ProfileEdit() {
       <form onSubmit={handleSubmit}>
         <br />
         <label>
-          Mobile Number:
-          <input name="mobileNumber" type="number" value={mobileNumber} onChange={handleChange} />
+          <p>
+            <strong>Your Mobile Number: </strong>
+          </p>
+          <input
+            name="mobileNumber"
+            type="number"
+            value={mobileNumber}
+            onChange={handleChange}
+            placeholder="New number put here ah"
+          />
         </label>
         <br />
         <label>
-          Display Picture:
-          <input name="displayPicture" type="url" value={displayPicture} onChange={handleChange} />
+          <p> Display Picture: </p>
+          {/* this is a component  */}
+          <ImageUpload />
         </label>
         <br />
         <br />
         {/* Address Edits */}
-        <h2>Address</h2>
+        <h2>
+          <strong>Your currrent Address is:</strong>
+        </h2>
+        {/* <ul>
+          {address.map((address) => (
+            <li key={address.id}>
+              <strong>Area:</strong> {address.area} <br />
+              <strong>Zip Code:</strong> {address.zipCode}
+            </li>
+          ))}
+        </ul> */}
+        <br />
         <label>
           Area:
           <input name="area" type="text" value={area} onChange={handleChange} />
@@ -111,7 +152,8 @@ function ProfileEdit() {
           <input name="zipCode" type="number" value={zipCode} onChange={handleChange} />
         </label>
         <br />
-        <input type="submit" value="Edit Profile BUTTON" />
+        <br />
+        <input type="submit" value="Update Profile BUTTON" />
       </form>
     </div>
   );
