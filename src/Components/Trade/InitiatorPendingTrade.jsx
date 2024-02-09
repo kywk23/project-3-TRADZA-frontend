@@ -1,14 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useSearchParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../constants";
 
 export default function InitiatorPendingTrade() {
-  const [initiatorListing, setInitiatorListing] = useState({
-    name: "XBox",
-    description: "Test",
-  });
-  const [acceptorListing, setAcceptorListing] = useState({
-    name: "Iphone",
-    description: "Test",
-  });
+  const [tradeDetails, setTradeDetails] = useState(null);
+  const [initiatorListing, setInitiatorListing] = useState({});
+  const [acceptorListing, setAcceptorListing] = useState({});
+  const [searchParams] = useSearchParams();
+  const newTradeId = searchParams.get("newTrade");
+
+  useEffect(() => {
+    const fetchTradeDetails = async () => {
+      console.log(newTradeId);
+      try {
+        const response = await axios.get(`${BACKEND_URL}/trades/${newTradeId}`);
+        setTradeDetails(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Failed to fetch trade details:", error);
+      }
+    };
+
+    if (newTradeId) {
+      fetchTradeDetails();
+    }
+  }, [newTradeId]);
 
   return (
     <div className="flex flex-col items-center py-1">

@@ -12,7 +12,8 @@ export default function ListingsPage() {
   //API Call: Get from Listings Table, filter by categories
   const fetchAllListings = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/listings`);
+      const response = await axios.get(`${BACKEND_URL}/categories/${category}`);
+      console.log(response)
       setListings(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

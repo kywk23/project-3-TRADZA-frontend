@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { BACKEND_URL } from "../../constants";
 
 //Components import
 import AuthenticationButton from "./Profile/LogInSignUp/Buttons/AuthenticationButton";
@@ -9,11 +12,21 @@ export default function Home() {
   //Auth0
 
   const { isAuthenticated, isLoading } = useAuth0();
+  
+  const [categories, setCategories] = useState([]);
 
-  //Arrays
+  useEffect(() => {
+    const fetchAllCategories = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/categories`);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  //API CALL: Fetch all categories
-  const categories = ["electronics", "household", "books", "repair", "chores", "tuition"];
+    fetchAllCategories();
+  }, []);
 
   return (
     <>
@@ -24,7 +37,9 @@ export default function Home() {
       <div>
         {categories.map((category, index) => (
           <div key={index}>
-            <Link to={`/categories/${category.toLowerCase()}`}>{category}</Link>
+            <Link to={`/categories/${category.name.toLowerCase()}`}>
+              {category.name}
+            </Link>
           </div>
         ))}
       </div>

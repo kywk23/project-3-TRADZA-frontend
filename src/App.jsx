@@ -57,7 +57,7 @@ function App() {
       element: <ListingsPage />,
     },
     {
-      path: "/listings/:id",
+      path: "/listings/:listingId",
       element: <IndividualListing />,
     },
     {
