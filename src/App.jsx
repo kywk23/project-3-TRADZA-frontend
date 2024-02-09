@@ -67,7 +67,7 @@ function App() {
 
     //Trade Room
     {
-      path: "/traderoom/:traderoomId",
+      path: "/traderoom/:tradeId",
       element: <TradeRoom />,
     },
     {
