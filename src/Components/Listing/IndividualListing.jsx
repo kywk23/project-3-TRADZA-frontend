@@ -36,7 +36,7 @@ export default function IndividualListing() {
           <h1 className="my-2">Listing ID: </h1>
           <h1 className="text-xl font-semibold text-gray-700">{listing.id}</h1>
         </div>
-        <div className="my-2">
+        <div className="flex flex-col items-center my-2">
           <h1>Listing: </h1>
           <h1 className="text-xl font-semibold text-gray-700 mx-auto">
             {listing.name}

@@ -18,10 +18,13 @@ export default function InitiatorPendingTrade() {
         setTradeDetails(response.data);
         const initiatorId = response.data.listingInitiator;
         const acceptorId = response.data.listingAcceptor;
+
         const listingsByTrade = await axios.get(
           `${BACKEND_URL}/listingsTrades/${newTradeId}`
         );
         const listingId1 = listingsByTrade.data[0].listingId;
+        const listingId2 = listingsByTrade.data[1].listingId;
+
         const initiatorListingsPromise = getListingsByUserId(initiatorId);
         const acceptorListingsPromise = getListingsByUserId(acceptorId);
 
@@ -31,15 +34,13 @@ export default function InitiatorPendingTrade() {
         ]);
 
         initiatorListings.forEach((listing) => {
-          listing.id == listingId1
-            ? setInitiatorListing(listing)
-            : setAcceptorListing(listing);
+          listing.id == listingId1 ? setInitiatorListing(listing) : null;
+          listing.id == listingId2 ? setInitiatorListing(listing) : null;
         });
 
         acceptorListings.forEach((listing) => {
-          listing.id == listingId1
-            ? setInitiatorListing(listing)
-            : setAcceptorListing(listing);
+          listing.id == listingId1 ? null : setAcceptorListing(listing);
+          listing.id == listingId2 ? null : setAcceptorListing(listing);
         });
       } catch (error) {
         console.error("Failed to fetch trade details:", error);
@@ -62,10 +63,10 @@ export default function InitiatorPendingTrade() {
           },
         }
       );
-      return response.data; // Assuming this is the structure you want
+      return response.data;
     } catch (error) {
       console.error("Error fetching listings:", error);
-      throw error; // Or handle it as needed
+      throw error;
     }
   };
 
@@ -81,8 +82,10 @@ export default function InitiatorPendingTrade() {
           Status: Waiting for User {tradeDetails.listingAcceptor} to accept...
         </div>
         <div className="text-3xl p-2 my-4">You want this: </div>
+        {console.log(acceptorListing)}
         <div>{acceptorListing.name}</div>
         <div className="text-3xl p-2 my-4">You are offering this: </div>
+        {console.log(initiatorListing)}
         <div>{initiatorListing.name}</div>
       </div>
       <Button
