@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../../constants";
 import { Button } from "react-bootstrap";
 
@@ -10,6 +10,7 @@ export default function AcceptorPendingTrade() {
   const [acceptorListing, setAcceptorListing] = useState({});
   const [searchParams] = useSearchParams();
   const newTradeId = searchParams.get("trade");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTradeDetails = async () => {
@@ -21,8 +22,10 @@ export default function AcceptorPendingTrade() {
         const listingsByTrade = await axios.get(
           `${BACKEND_URL}/listingsTrades/${newTradeId}`
         );
-        
+
         const listingId1 = listingsByTrade.data[0].listingId;
+        const listingId2 = listingsByTrade.data[1].listingId;
+
         const initiatorListingsPromise = getListingsByUserId(initiatorId);
         const acceptorListingsPromise = getListingsByUserId(acceptorId);
 
@@ -32,15 +35,13 @@ export default function AcceptorPendingTrade() {
         ]);
 
         initiatorListings.forEach((listing) => {
-          listing.id == listingId1
-            ? setInitiatorListing(listing)
-            : setAcceptorListing(listing);
+          listing.id == listingId1 ? setInitiatorListing(listing) : null;
+          listing.id == listingId2 ? setInitiatorListing(listing) : null;
         });
 
         acceptorListings.forEach((listing) => {
-          listing.id == listingId1
-            ? setInitiatorListing(listing)
-            : setAcceptorListing(listing);
+          listing.id == listingId1 ? null : setAcceptorListing(listing);
+          listing.id == listingId2 ? null : setAcceptorListing(listing);
         });
       } catch (error) {
         console.error("Failed to fetch trade details:", error);
@@ -70,7 +71,26 @@ export default function AcceptorPendingTrade() {
     }
   };
 
-  const handleClick = () => {};
+  const handleAcceptTrade = async () => {
+    const response = await axios.put(`${BACKEND_URL}/trades/update-status`, {
+      tradeId: newTradeId,
+      newTradeStatus: "Ongoing",
+    });
+    console.log(response);
+    navigate(`/traderoom/${newTradeId}`);
+  };
+
+  const handleRejectTrade = async () => {
+    const response = await axios.delete(`${BACKEND_URL}/trades/delete-trade`, {
+      data: { tradeId: newTradeId },
+    });
+
+    if (response.data.success) {
+      console.log(response.data.msg);
+    } else {
+      console.error(response.data.msg);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center py-1">
@@ -87,17 +107,18 @@ export default function AcceptorPendingTrade() {
           {" "}
           User {tradeDetails.listingInitiator} is offering this:{" "}
         </div>
+        {console.log(initiatorListing)}
         <div>{initiatorListing.name}</div>
         <div className="flex my-2">
           <Button
             style={{ margin: "1rem", backgroundColor: "darkcyan" }}
-            onClick={handleClick}
+            onClick={handleAcceptTrade}
           >
             Accept Trade
           </Button>
           <Button
             style={{ margin: "1rem", backgroundColor: "darkcyan" }}
-            onClick={handleClick}
+            onClick={handleRejectTrade}
           >
             Reject Trade
           </Button>

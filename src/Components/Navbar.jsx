@@ -32,6 +32,9 @@ function Navbar() {
                   <a href="/user-trades">My Trades</a>
                 </li>
                 <li>
+                  <a href="/browse-listings">Browse</a>
+                </li>
+                <li>
                   <a href="/mylistings">My Listings</a>
                 </li>
                 <li>

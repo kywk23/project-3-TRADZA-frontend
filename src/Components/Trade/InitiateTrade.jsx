@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 import { BACKEND_URL } from "../../../constants";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useUserId } from "../Users/GetCurrentUser";
 
 export default function InitiateTrade() {
   const [wantedListing, setWantedListing] = useState([]);
@@ -10,6 +11,8 @@ export default function InitiateTrade() {
   const [chosenListing, setChosenListing] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const listingId = searchParams.get("listingId");
+  const { currentUser } = useUserId();
+  const userId = currentUser.id;
 
   useEffect(() => {
     axios.get(`${BACKEND_URL}/listings/${listingId}`).then((response) => {
@@ -21,8 +24,8 @@ export default function InitiateTrade() {
     axios
       .get(`${BACKEND_URL}/listings/user-listings`, {
         params: {
-          userId: 4,
-          listingStatus: true,
+          userId: userId,
+          listingStatus: true
         },
       })
       .then((response) => {
