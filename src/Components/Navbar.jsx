@@ -11,7 +11,7 @@ function Navbar() {
   return (
     <div>
       <nav className="bg-gray-800 text-white p-4">
-        <div className="container mx-auto flex justify-between items-center">
+        <div className="container flex justify-between">
           <div className="text-lg font-semibold">
             {/* Logo or brand name */}
             <a href="/">Barter Trade</a>
