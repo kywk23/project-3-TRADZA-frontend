@@ -12,7 +12,7 @@ export default function Home() {
   //Auth0
 
   const { isAuthenticated, isLoading } = useAuth0();
-  
+
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {

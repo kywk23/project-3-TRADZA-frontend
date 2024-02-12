@@ -26,7 +26,6 @@ export default function InitiateTrade() {
         },
       })
       .then((response) => {
-        console.log("Listings:", response.data);
         setOfferedListings(response.data);
       })
       .catch((error) => {
@@ -61,7 +60,7 @@ export default function InitiateTrade() {
         Promise.all(linkListingsPromises)
           .then((responses) => {
             console.log("Both listings linked successfully:", responses);
-            navigate(`/user-trades/pending/initiator?newTrade=${newTradeId}`);
+            navigate(`/user-trades/pending/initiator?trade=${newTradeId}`);
           })
           .catch((error) => {
             console.error("An error occurred linking listings:", error);
