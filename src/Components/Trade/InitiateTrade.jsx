@@ -25,7 +25,7 @@ export default function InitiateTrade() {
       .get(`${BACKEND_URL}/listings/user-listings`, {
         params: {
           userId: userId,
-          listingStatus: true
+          listingStatus: true,
         },
       })
       .then((response) => {
@@ -35,14 +35,14 @@ export default function InitiateTrade() {
         console.log(error);
         console.error("Error fetching listings:", error);
       });
-  }, []);
+  }, [userId]);
 
   const navigate = useNavigate();
 
   const handleClick = () => {
     axios
       .post(`${BACKEND_URL}/trades`, {
-        listingInitiator: 4,
+        listingInitiator: userId,
         listingAcceptor: wantedListing.userId,
         tradeStatus: "Pending",
       })
@@ -105,10 +105,7 @@ export default function InitiateTrade() {
             </button>
           ))}
         </div>
-        <Button
-          style={{ margin: "1rem", backgroundColor: "darkcyan" }}
-          onClick={handleClick}
-        >
+        <Button style={{ margin: "1rem", backgroundColor: "darkcyan" }} onClick={handleClick}>
           Initiate Trade
         </Button>
       </div>

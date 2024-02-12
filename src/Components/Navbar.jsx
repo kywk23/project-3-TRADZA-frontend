@@ -10,7 +10,12 @@ function Navbar() {
 
   return (
     <div>
-      <nav className="bg-gray-800 text-white p-4">
+      <nav
+        className="
+       text-white
+        p-4"
+        style={{ backgroundColor: "#000000" }}
+      >
         <div className="container mx-auto flex justify-between items-center">
           <div className="text-lg font-semibold">
             {/* Logo or brand name */}
@@ -21,7 +26,9 @@ function Navbar() {
               <FontAwesomeIcon icon={faBars} className="w-6 h-6" />
             </button>
           </div>
-          <ul className={`md:flex space-x-4 ${isOpen ? "block" : "hidden"}`}>
+          <ul
+            className={`font-mono m-2 md:flex space-x-7 ${isOpen ? "block" : "hidden"} md:ml-auto`}
+          >
             {/* Navigation links */}
             <li>
               <a href="/home">Home</a>
