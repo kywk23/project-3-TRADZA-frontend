@@ -13,6 +13,39 @@ function ImageUpload() {
   // take url (downloadUrl) => .post to postgre (display pic model)
   //.get from postgre; tracking where user_id == user_id .
   //render all
+
+  // const uploadImage = async () => {
+  //   try {
+  //     const storageRefInstance = ref(storage, DB_STORAGE_PP_KEY + currentUser.id);
+  //     console.log(storageRefInstance);
+  //     const url = await uploadBytes(storageRefInstance, fileValue).then(() =>
+  //       getDownloadURL(storageRefInstance)
+  //     );
+  //     console.log(fileValue);
+  //     console.log(`getDownloadurl`, getDownloadURL);
+  //     setDisplayPictureUrl(url);
+  //     console.log(`url`, url);
+  //   } catch (error) {
+  //     console.error("Error uploading image:", error);
+  //   }
+  // };
+
+  const uploadImage = async () => {
+    try {
+      const storageRefInstance = ref(storage, fileValue.name);
+      console.log(storageRefInstance);
+      const url = await uploadBytes(storageRefInstance, fileValue).then(() =>
+        getDownloadURL(storageRefInstance)
+      );
+      console.log(fileValue);
+      console.log(`getDownloadurl`, getDownloadURL);
+      setDisplayPictureUrl(url);
+      console.log(`url`, url);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchDisplayPicture = async () => {
       try {
@@ -28,22 +61,6 @@ function ImageUpload() {
 
     fetchDisplayPicture();
   }, [currentUser, storage]);
-
-  const uploadImage = async () => {
-    try {
-      const storageRefInstance = ref(storage, DB_STORAGE_PP_KEY + currentUser.id);
-      console.log(storageRefInstance);
-      const url = await uploadBytes(storageRefInstance, fileValue).then(() =>
-        getDownloadURL(storageRefInstance)
-      );
-      console.log(fileValue);
-      console.log(`getDownloadurl`, getDownloadURL);
-      setDisplayPictureUrl(url);
-      console.log(`url`, url);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-  };
 
   return (
     <div>
