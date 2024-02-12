@@ -13,7 +13,6 @@ function ProfileEdit() {
   const [area, setArea] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [address, setAddress] = useState([]);
-  const [displayPicture, setDisplayPicture] = useState(null);
   //
   const { currentUser } = useUserId();
   const userId = currentUser.id;
@@ -49,9 +48,6 @@ function ProfileEdit() {
       case "mobileNumber":
         setMobileNumber(event.target.value);
         break;
-      case "displayPicture":
-        setDisplayPicture(event.target.files[0]);
-        break;
       case "area":
         setArea(event.target.value);
         break;
@@ -64,7 +60,6 @@ function ProfileEdit() {
 
   const updateMobileNumber = async () => {
     const token = await getAccessTokenSilently();
-
     const response = await axios.put(
       `${BACKEND_URL}/users/edit/mobile/${userId}`,
       {
@@ -76,6 +71,7 @@ function ProfileEdit() {
         },
       }
     );
+    console.log(token);
     console.log(`phone num updated`, response);
   };
 
