@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { BACKEND_URL } from "../../../constants";
 
 export default function IndividualListing() {
   const [listing, setListing] = useState({
@@ -9,12 +11,16 @@ export default function IndividualListing() {
   });
   let { listingId } = useParams();
 
-  //API Call: Get listings using listingId
-  //setListing
+  useEffect(() => {
+    axios.get(`${BACKEND_URL}/listings/${listingId}`).then((response) => {
+      console.log(response.data);
+      setListing(response.data);
+    });
+  }, []);
 
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/initiate-trade`);
+    navigate(`/initiate-trade?listingId=${listingId}`);
   };
 
   return (
@@ -25,10 +31,29 @@ export default function IndividualListing() {
       >
         Back to Listings
       </Link>
-      <div className="flex flex-col items-center max-w-4xl mx-auto p-5 bg-gray-200 rounded-lg shadow">
-        <h1 className="text-xl font-semibold text-gray-700">{listing.name}</h1>
-        <img src="../src/Assets/Electronics.jpg" className="my-8 w-80 h-60" />
-        <h1 className="text-xl font-semibold text-gray-700">{listing.description}</h1>
+      <div className="flex flex-col items-center max-w-4xl p-5 bg-gray-200 rounded-lg shadow">
+        <div className="flex flex-col items-center my-2">
+          <h1 className="my-2">Listing ID: </h1>
+          <h1 className="text-xl font-semibold text-gray-700">{listing.id}</h1>
+        </div>
+        <div className="flex flex-col items-center my-2">
+          <h1>Listing: </h1>
+          <h1 className="text-xl font-semibold text-gray-700 mx-auto">
+            {listing.name}
+          </h1>
+        </div>
+        <div className="flex flex-col items-center my-2">
+          <h1 className="my-2">Description: </h1>
+          <h1 className="text-xl font-semibold text-gray-700">
+            {listing.description}
+          </h1>
+        </div>
+        <div className="flex flex-col items-center my-2">
+          <h1 className="my-2">Listed by User: </h1>
+          <h1 className="text-xl font-semibold text-gray-700">
+            {listing.userId}
+          </h1>
+        </div>
         <Button
           style={{ margin: "1rem", backgroundColor: "darkcyan" }}
           onClick={handleClick}

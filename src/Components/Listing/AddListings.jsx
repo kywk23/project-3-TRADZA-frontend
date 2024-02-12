@@ -3,16 +3,19 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import { BACKEND_URL } from "../../../constants";
-import { list } from "postcss";
+import { useUserId } from "../Users/GetCurrentUser";
 
 export default function AddListings() {
+  const { currentUser } = useUserId();
+  const userId = currentUser.id;
+
   const [newListing, setNewListing] = useState({
     name: "",
     description: "",
-    userId: 4,
+    userId: userId,
     numberOfLikes: 0,
-    condition: "New",
-    listingStatus: false,
+    condition: "",
+    listingStatus: true,
   });
   const [allCategories, setAllCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -23,14 +26,33 @@ export default function AddListings() {
     });
   }, []);
 
+  useEffect(() => {
+    setNewListing((prevState) => ({
+      ...prevState,
+      userId: userId,
+    }));
+  }, [userId]);
   const categoryOptions = allCategories.map((category) => ({
     value: category.id,
     label: category.name,
   }));
 
+  const conditionOptions = [
+    { value: "new", label: "New" },
+    { value: "used", label: "Used" },
+    { value: "used_once", label: "Used_once" },
+  ];
+
   const handleSelectChange = (selected) => {
     setSelectedCategories(selected);
   };
+
+  function handleConditionChange(selectedOption) {
+    setNewListing((prevState) => ({
+      ...prevState,
+      conditions: selectedOption ? selectedOption.value : "",
+    }));
+  }
 
   const handleChange = (e) => {
     let name = e.target.name;
@@ -50,16 +72,14 @@ export default function AddListings() {
 
     axios.post(`${BACKEND_URL}/listings`, newListing).then((response) => {
       const listingId = response.data.id;
-      return axios.post(
-        `${BACKEND_URL}/categories/create-listings-categories`,
-        {
+      return axios
+        .post(`${BACKEND_URL}/categories/create-listings-categories`, {
           listingId: listingId,
           categories: categoriesToSubmit,
-        }
-      )
-      .then((response) => {
-        console.log(response)
-      })
+        })
+        .then((response) => {
+          console.log(response);
+        });
     });
 
     setNewListing({
@@ -80,7 +100,7 @@ export default function AddListings() {
   return (
     <div className="flex flex-col items-center py-1">
       <Link
-        to="/categories"
+        to="/home"
         className="inline-block text-blue-700 hover:text-blue-300 transition duration-300 ease-in-out py-4 text-3xl"
       >
         Back to Home
@@ -110,12 +130,12 @@ export default function AddListings() {
         </label>
         <label className="block mb-2">
           Condition:
-          <input
-            type="text"
+          <Select
             name="condition"
-            value={newListing.condition}
-            onChange={handleChange}
+            options={conditionOptions}
+            onChange={handleConditionChange}
             className="w-full p-2 border rounded-md"
+            classNamePrefix="select"
           />
         </label>
         <div className="mb-4">

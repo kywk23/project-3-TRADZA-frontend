@@ -3,16 +3,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { BACKEND_URL } from "../../../constants.jsx";
-import { useParams } from "react-router-dom";
 
-export default function ListingsPage() {
+export default function BrowseListings() {
   const [listings, setListings] = useState([]);
-  let { category } = useParams();
 
   const fetchAllListings = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/categories/${category}`);
-      console.log(response.data);
+      const response = await axios.get(`${BACKEND_URL}/listings`);
+      console.log(response);
       setListings(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -31,7 +29,11 @@ export default function ListingsPage() {
       >
         Back to Home
       </Link>
-      <h1>Showing the category: {category}</h1>
+      <h1>Browse Listings</h1>
+      <div className="flex p-2">
+        <div className="p-2 text-2xl bg-blue-200 mx-2">All Listings</div>
+        <div className="p-2 text-2xl bg-blue-200 mx-2">By User</div>
+      </div>
       <div className="flex flex-col items-center py-1 text-3xl">
         {/* Render your UI based on the fetched data */}
         {listings.map((listing, index) => (

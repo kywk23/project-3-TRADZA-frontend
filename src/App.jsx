@@ -21,6 +21,8 @@ import InitiateTrade from "./Components/Trade/InitiateTrade";
 import AllUserTrades from "./Components/Trade/AllUserTrades";
 import InitiatorPendingTrade from "./Components/Trade/InitiatorPendingTrade";
 import AcceptorPendingTrade from "./Components/Trade/AcceptorPendingTrade";
+import BrowseListings from "./Components/Listing/BrowseListings";
+import ChatRoom from "./Components/Trade/ChatRoom";
 
 function App() {
   const router = createBrowserRouter([
@@ -49,6 +51,10 @@ function App() {
     },
     //Listing Pages
     {
+      path: "/browse-listings",
+      element: <BrowseListings />,
+    },
+    {
       path: "/mylistings",
       element: <UserListings />,
     },
@@ -57,7 +63,7 @@ function App() {
       element: <ListingsPage />,
     },
     {
-      path: "/listings/:id",
+      path: "/listings/:listingId",
       element: <IndividualListing />,
     },
     {
@@ -67,7 +73,7 @@ function App() {
 
     //Trade Room
     {
-      path: "/traderoom/:traderoomId",
+      path: "/traderoom/:tradeId",
       element: <TradeRoom />,
     },
     {
@@ -86,6 +92,10 @@ function App() {
       path: "/user-trades/pending/acceptor",
       element: <AcceptorPendingTrade />,
     },
+    {
+      path: "/chat-test",
+      element: <ChatRoom />
+    }
   ]);
   return (
     <>
