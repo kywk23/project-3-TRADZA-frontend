@@ -1,1 +1,12 @@
 font mono
+align - "h-screen flex flex-col justify-center items-center"
+
+
+ {currentUser && (
+        <h2 className="text-xl">
+          {" "}
+          Hello! <span className="font-semibold"> {currentUser.firstName} </span>{" "}
+        </h2>
+      )}
+
+          src="../src/Assets/Electronics.jpg"

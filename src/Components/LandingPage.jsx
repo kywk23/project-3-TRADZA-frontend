@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Tradiza from "../Assets/Tradiza.png";
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -12,9 +13,9 @@ function LandingPage() {
   }, [navigate]);
 
   return (
-    <div>
-      <h1> Title/Image/Logo of our App </h1>
-      <h1>welcome to the Landing Page</h1>
+    <div className="h-screen flex flex-col justify-center items-center">
+      <img src={Tradiza} alt="Logo of our App" className="max-w-full mb-4" />
+      <h1 className="font-bold text-6xl"></h1>
     </div>
   );
 }

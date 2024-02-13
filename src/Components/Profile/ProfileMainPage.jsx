@@ -10,20 +10,27 @@ function ProfileMainPage() {
   const { currentUser } = useUserId();
 
   return (
-    <div>
-      <h1>Profile - Main Page</h1>
+    <div className="flex flex-col justify-center items-center">
       <br />
-
-      {currentUser && <h2> Hello ! {currentUser.firstName} </h2>}
+      {currentUser && (
+        <h2 className="text-xl">
+          {" "}
+          Hello! <span className="font-semibold"> {currentUser.firstName} </span>{" "}
+        </h2>
+      )}
       <br />
       <div>
-        <li>
+        <li className="link link-hover">
           <Link to="/profile/edit">Edit Profile</Link>
         </li>
       </div>
       <br />
       <br />
-      {isAuthenticated && <LogOutButton />}
+      {isAuthenticated && (
+        <div className="btn btn-error ">
+          <LogOutButton />
+        </div>
+      )}
     </div>
   );
 }

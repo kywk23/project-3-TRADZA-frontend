@@ -2,33 +2,14 @@ import { DB_STORAGE_PP_KEY } from "../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useUserId } from "../Users/GetCurrentUser";
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
 
 function ImageUpload() {
   const storage = getStorage();
   const { currentUser } = useUserId();
   const [displayPictureUrl, setDisplayPictureUrl] = useState("");
   const [fileValue, setFileValue] = useState(null);
-
-  // upload image to firebase
-  // take url (downloadUrl) => .post to postgre (display pic model)
-  //.get from postgre; tracking where user_id == user_id .
-  //render all
-
-  // const uploadImage = async () => {
-  //   try {
-  //     const storageRefInstance = ref(storage, DB_STORAGE_PP_KEY + currentUser.id);
-  //     console.log(storageRefInstance);
-  //     const url = await uploadBytes(storageRefInstance, fileValue).then(() =>
-  //       getDownloadURL(storageRefInstance)
-  //     );
-  //     console.log(fileValue);
-  //     console.log(`getDownloadurl`, getDownloadURL);
-  //     setDisplayPictureUrl(url);
-  //     console.log(`url`, url);
-  //   } catch (error) {
-  //     console.error("Error uploading image:", error);
-  //   }
-  // };
 
   const uploadImage = async () => {
     try {
@@ -65,16 +46,17 @@ function ImageUpload() {
   return (
     <div>
       {displayPictureUrl && (
-        <img src={displayPictureUrl} alt="Uploaded" style={{ maxWidth: "25%", maxHeight: "25%" }} />
+        <img src={displayPictureUrl} alt="Uploaded" className="avatar w-24 rounded-full" />
       )}
-      <input
-        className="bg-blue-500"
-        type="file"
-        onChange={(e) => setFileValue(e.target.files[0])}
-      />
-      <button className="bg-red-500" onClick={uploadImage}>
+      <br />
+      <label className="bg-white px-4 py-2 rounded-md cursor-pointer">
+        <FontAwesomeIcon icon={faCameraRetro} />
+        <input type="file" onChange={(e) => setFileValue(e.target.files[0])} className="hidden" />
+        <br />
+      </label>
+      <button className="btn btn-outline btn-success" onClick={uploadImage}>
         {" "}
-        upload image{" "}
+        Change my Display{" "}
       </button>
     </div>
   );
