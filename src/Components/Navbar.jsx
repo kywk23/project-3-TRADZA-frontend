@@ -24,7 +24,7 @@ function Navbar() {
             </a>
           </div>
           <div className="flex-none">
-            <ul className="menu menu-horizontal px-1">
+            <ul className="menu menu-horizontal px-1 text-xl">
               <li>
                 <a href="/home">Home</a>
               </li>

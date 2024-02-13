@@ -10,3 +10,48 @@ align - "h-screen flex flex-col justify-center items-center"
       )}
 
           src="../src/Assets/Electronics.jpg"
+
+
+      <form className="w-full max-w-lg" onSubmit={handleSubmit}> DD
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              First Name:
+              <input
+                type="text"
+                required
+                name="firstName"
+                value={firstName}
+                onChange={handleChange}
+                placeholder="First Name"
+              />
+            </label>
+
+            <p className="text-red-500 text-xs italic">Please fill out this field.</p>
+          </div>
+          <label>
+            Last Name:
+            <input
+              type="text"
+              name="lastName"
+              value={lastName}
+              onChange={handleChange}
+              placeholder="Last Name"
+            />
+          </label>
+          <br />
+          <label>
+            Mobile Number *:
+            <input
+              type="number"
+              required
+              name="mobileNumber"
+              value={mobileNumber}
+              onChange={handleChange}
+              placeholder="Mobile Number"
+            />
+          </label>
+          <br />
+          <input type="submit" value="Submit" />
+        </div>
+      </form>
