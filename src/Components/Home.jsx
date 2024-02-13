@@ -30,34 +30,33 @@ export default function Home() {
 
   return (
     <>
-      <h1>Home Page (this is a placeholder) </h1>
-      {/* Displays Loading when the page is loading */}
+      <div className=" flex flex-col justify-center items-center">
+        {/* Displays Loading when the page is loading */}
 
-      <br />
-      <div>
-        {categories.map((category, index) => (
-          <div key={index}>
-            <Link to={`/categories/${category.name.toLowerCase()}`}>
-              {category.name}
-            </Link>
-          </div>
-        ))}
+        <br />
+        <div>
+          {categories.map((category, index) => (
+            <div key={index}>
+              <Link to={`/categories/${category.name.toLowerCase()}`}>{category.name}</Link>
+            </div>
+          ))}
+        </div>
+        <br />
+        {/* Once user is logged in. Hide LogIn and Sign Up buttons.  */}
+        {isLoading
+          ? null
+          : !isAuthenticated && (
+              <>
+                <h2>Log in here: </h2>
+                <AuthenticationButton />
+                <br />
+                <br />
+                <h3>No Account? Sign up here:</h3>
+                <SignUpButton />
+                <br />
+              </>
+            )}
       </div>
-      <br />
-      {/* Once user is logged in. Hide LogIn and Sign Up buttons.  */}
-      {isLoading
-        ? null
-        : !isAuthenticated && (
-            <>
-              <h2>Log in here: </h2>
-              <AuthenticationButton />
-              <br />
-              <br />
-              <h3>No Account? Sign up here:</h3>
-              <SignUpButton />
-              <br />
-            </>
-          )}
     </>
   );
 }

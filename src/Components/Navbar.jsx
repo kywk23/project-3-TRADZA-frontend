@@ -13,46 +13,52 @@ function Navbar() {
       <nav
         className="
        text-white
-        p-4"
+        p-4 m-4"
         style={{ backgroundColor: "#000000" }}
       >
         <div className="container mx-auto flex justify-between items-center">
-          <div className="text-lg font-semibold">
+          <div>
             {/* Logo or brand name */}
-            <a href="/">Barter Trade</a>
+            <a className=" btn btn-ghost font-bold text-4xl" href="/">
+              T R A D I Z A
+            </a>
           </div>
-          <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)}>
-              <FontAwesomeIcon icon={faBars} className="w-6 h-6" />
-            </button>
+          <div className="flex-none">
+            <ul className="menu menu-horizontal px-1">
+              <li>
+                <a href="/home">Home</a>
+              </li>
+              {isAuthenticated && (
+                <>
+                  <li>
+                    <details>
+                      <summary>
+                        <a>Trades</a>
+                      </summary>
+                      <ul className="p-2 bg-black rounded-t-none">
+                        <li>
+                          <a href="/browse-listings">Browse</a>
+                        </li>
+                        <li>
+                          <a href="/user-trades">My Trades</a>
+                        </li>
+
+                        <li>
+                          <a href="/mylistings">My Listings</a>
+                        </li>
+                        <li>
+                          <a href="/add-listing">Add Listing</a>
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                  <li>
+                    <a href="/profile">Profile</a>
+                  </li>
+                </>
+              )}
+            </ul>
           </div>
-          <ul
-            className={`font-mono m-2 md:flex space-x-7 ${isOpen ? "block" : "hidden"} md:ml-auto`}
-          >
-            {/* Navigation links */}
-            <li>
-              <a href="/home">Home</a>
-            </li>
-            {isAuthenticated && (
-              <>
-                <li>
-                  <a href="/user-trades">My Trades</a>
-                </li>
-                <li>
-                  <a href="/browse-listings">Browse</a>
-                </li>
-                <li>
-                  <a href="/mylistings">My Listings</a>
-                </li>
-                <li>
-                  <a href="/add-listing">Add Listing</a>
-                </li>
-                <li>
-                  <a href="/profile">Profile</a>
-                </li>
-              </>
-            )}
-          </ul>
         </div>
       </nav>
     </div>
