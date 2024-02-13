@@ -32,7 +32,6 @@ export default function Home() {
     <>
       <div className=" flex flex-col justify-center items-center">
         {/* Displays Loading when the page is loading */}
-
         <br />
         <div>
           {categories.map((category, index) => (
@@ -41,20 +40,22 @@ export default function Home() {
             </div>
           ))}
         </div>
+
         <br />
         {/* Once user is logged in. Hide LogIn and Sign Up buttons.  */}
+        {/* NEEDS TO FIX */}
         {isLoading
           ? null
           : !isAuthenticated && (
-              <>
-                <h2>Log in here: </h2>
-                <AuthenticationButton />
-                <br />
-                <br />
-                <h3>No Account? Sign up here:</h3>
-                <SignUpButton />
-                <br />
-              </>
+              <div className="flex m-5 gap-8 items-center max-w-screen-xl ">
+                <div className="flex-1 btn btn-black">
+                  <AuthenticationButton />
+                </div>
+                <div className="flex-1 ">
+                  <p className="text-xs italic ">No Account?</p>
+                  <SignUpButton />
+                </div>
+              </div>
             )}
       </div>
     </>
