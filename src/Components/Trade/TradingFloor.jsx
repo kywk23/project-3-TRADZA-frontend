@@ -2,13 +2,16 @@ import { BACKEND_URL } from "../../../constants";
 import axios from "axios";
 
 export default function TradingFloor({
+  initiatorAgreed,
+  acceptorAgreed,
   tradeStateChanged,
   setTradeStateChanged,
   tradeId,
   user,
   partner,
   userTradeBucket,
-  partnerTradeBucket
+  partnerTradeBucket,
+  currentTradeStatus,
 }) {
   const handleDelete = async (listingId) => {
     try {
@@ -29,11 +32,29 @@ export default function TradingFloor({
   };
 
   const handleReadyToTrade = async () => {
-    const response = await axios.put(`${BACKEND_URL}/trades/update-status`, {
-      tradeId: tradeId,
-      newTradeStatus: "Completed",
-    });
-    setTradeStateChanged(!tradeStateChanged);
+    const tradeDetails = await axios.get(`${BACKEND_URL}/trades/${tradeId}`);
+    const listingInitiatorId = tradeDetails.data.listingInitiator;
+    const listingAcceptorId = tradeDetails.data.listingAcceptor;
+    console.log(listingInitiatorId);
+    console.log(listingAcceptorId);
+    let updateAgreedPerson = "";
+    if (listingInitiatorId == user.id) {
+      updateAgreedPerson = "initiator";
+    } else {
+      updateAgreedPerson = "acceptor";
+    }
+
+    if (initiatorAgreed == false && acceptorAgreed == false) {
+      const response = await axios.put(
+        `${BACKEND_URL}/trades/update-agree-status`,
+        {
+          tradeId: tradeId,
+          whoAgreed: updateAgreedPerson,
+        }
+      );
+      console.log(response);
+      setTradeStateChanged(!tradeStateChanged);
+    }
   };
 
   return (
@@ -67,7 +88,7 @@ export default function TradingFloor({
           {" "}
           {partner.firstName}'s Trading Bucket:{" "}
         </h1>
-        <div className="flex justify-center items-center border-black border-1 mx-2 h-56">
+        <div className="flex flex-col justify-center items-center border-black border-1 mx-2 h-56">
           {partnerTradeBucket.map((listing, index) => (
             <div key={index}>{listing.name}</div>
           ))}

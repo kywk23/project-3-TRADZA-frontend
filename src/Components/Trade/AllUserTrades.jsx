@@ -8,6 +8,7 @@ export default function AllUserTrades() {
   const [pendingInitiatorTrades, setPendingInitiatorTrades] = useState([]);
   const [pendingAcceptorTrades, setPendingAcceptorTrades] = useState([]);
   const [ongoingTrades, setOngoingTrades] = useState([]);
+  const [pendingCompletedTrades, setPendingCompletedTrades] = useState([]);
   const [completedTrades, setCompletedTrades] = useState([]);
 
   const { currentUser } = useUserId();
@@ -100,6 +101,11 @@ export default function AllUserTrades() {
         <h1 className="text-3xl my-4">Ongoing Trades</h1>
         <div className="border-black border-2 p-3 h-96 w-96">
           {ongoingTrades.map((trade, index) => (
+            <div key={index}>
+              <Link to={`/traderoom/${trade.id}`}>{trade.id}</Link>
+            </div>
+          ))}
+          {pendingCompletedTrades.map((trade, index) => (
             <div key={index}>
               <Link to={`/traderoom/${trade.id}`}>{trade.id}</Link>
             </div>

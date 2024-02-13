@@ -15,7 +15,6 @@ function GetCurrentUser({ children }) {
     if (isAuthenticated) {
       try {
         const res = await axios.get(`${BACKEND_URL}/users/email/${user.email}`);
-        console.log(res.data);
         const PgObject = res.data;
         setCurrentUser(PgObject);
       } catch (error) {
@@ -34,7 +33,11 @@ function GetCurrentUser({ children }) {
     console.log("DB Current User obj:", currentUser);
   }, [currentUser]);
 
-  return <UserContext.Provider value={{ currentUser }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ currentUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 export const useUserId = () => {
