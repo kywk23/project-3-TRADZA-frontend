@@ -23,8 +23,12 @@ import InitiatorPendingTrade from "./Components/Trade/InitiatorPendingTrade";
 import AcceptorPendingTrade from "./Components/Trade/AcceptorPendingTrade";
 import BrowseListings from "./Components/Listing/BrowseListings";
 import ChatRoom from "./Components/Trade/ChatRoom";
+import { useUserId } from "./Components/Users/GetCurrentUser";
 
 function App() {
+  const { currentUser } = useUserId();
+  const userId = currentUser.id;
+
   const router = createBrowserRouter([
     //LandingPage - Solely for user flow/aestheic purposes
     {
@@ -74,7 +78,7 @@ function App() {
     //Trade Room
     {
       path: "/traderoom/:tradeId",
-      element: <TradeRoom />,
+      element: <TradeRoom userId={userId}/>,
     },
     {
       path: "/initiate-trade",

@@ -11,9 +11,7 @@ function Navbar() {
   return (
     <div>
       <nav
-        className="
-       text-white
-        p-4"
+        className="z-30 text-white p-4"
         style={{ backgroundColor: "#000000" }}
       >
         <div className="container mx-auto flex justify-between items-center">
@@ -27,7 +25,9 @@ function Navbar() {
             </button>
           </div>
           <ul
-            className={`font-mono m-2 md:flex space-x-7 ${isOpen ? "block" : "hidden"} md:ml-auto`}
+            className={`font-mono m-2 md:flex space-x-7 ${
+              isOpen ? "block" : "hidden"
+            } md:ml-auto`}
           >
             {/* Navigation links */}
             <li>

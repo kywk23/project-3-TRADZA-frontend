@@ -10,6 +10,7 @@ export default function InitiateTrade() {
   const [offeredListings, setOfferedListings] = useState([]);
   const [chosenListing, setChosenListing] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [activeIndex, setActiveIndex] = useState(null);
   const listingId = searchParams.get("listingId");
   const { currentUser } = useUserId();
   const userId = currentUser.id;
@@ -75,14 +76,12 @@ export default function InitiateTrade() {
   };
 
   const handleChooseTradeClick = (index) => {
-    const updatedListing = offeredListings.map((listing, i) => {
+    offeredListings.forEach((listing, i) => {
       if (i === index) {
         setChosenListing(listing);
-        return { ...listing, isActive: !listing.isActive };
       }
-      return listing;
     });
-    setOfferedListings(updatedListing);
+    setActiveIndex(index);
   };
 
   return (
@@ -96,7 +95,7 @@ export default function InitiateTrade() {
           {offeredListings.map((listing, index) => (
             <button
               className={`text-xl my-2 p-3 rounded-md ${
-                listing.isActive ? "bg-pink-500" : "bg-pink-300"
+                activeIndex === index ? "bg-pink-500" : "bg-pink-300"
               }`}
               key={index}
               onClick={() => handleChooseTradeClick(index)}
@@ -105,7 +104,10 @@ export default function InitiateTrade() {
             </button>
           ))}
         </div>
-        <Button style={{ margin: "1rem", backgroundColor: "darkcyan" }} onClick={handleClick}>
+        <Button
+          style={{ margin: "1rem", backgroundColor: "darkcyan" }}
+          onClick={handleClick}
+        >
           Initiate Trade
         </Button>
       </div>

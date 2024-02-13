@@ -2,13 +2,16 @@ import { BACKEND_URL } from "../../../constants";
 import axios from "axios";
 
 export default function TradingFloor({
+  initiatorAgreed,
+  acceptorAgreed,
   tradeStateChanged,
   setTradeStateChanged,
   tradeId,
   user,
   partner,
   userTradeBucket,
-  partnerTradeBucket
+  partnerTradeBucket,
+  currentTradeStatus,
 }) {
   const handleDelete = async (listingId) => {
     try {
@@ -29,11 +32,75 @@ export default function TradingFloor({
   };
 
   const handleReadyToTrade = async () => {
-    const response = await axios.put(`${BACKEND_URL}/trades/update-status`, {
-      tradeId: tradeId,
-      newTradeStatus: "Completed",
-    });
-    setTradeStateChanged(!tradeStateChanged);
+    const tradeDetails = await axios.get(`${BACKEND_URL}/trades/${tradeId}`);
+    const listingInitiatorId = tradeDetails.data.listingInitiator;
+    const listingAcceptorId = tradeDetails.data.listingAcceptor;
+    console.log(listingInitiatorId);
+    console.log(listingAcceptorId);
+    let updateAgreedPerson = "";
+    if (listingInitiatorId == user.id) {
+      updateAgreedPerson = "initiator";
+    } else {
+      updateAgreedPerson = "acceptor";
+    }
+    console.log(updateAgreedPerson);
+    console.log(initiatorAgreed);
+    console.log(acceptorAgreed);
+    if (initiatorAgreed == false && acceptorAgreed == false) {
+      const response = await axios.put(
+        `${BACKEND_URL}/trades/update-agree-status`,
+        {
+          tradeId: tradeId,
+          whoAgreed: updateAgreedPerson,
+        }
+      );
+      console.log(response);
+      setTradeStateChanged(!tradeStateChanged);
+    }
+
+    if (initiatorAgreed == false && acceptorAgreed == true) {
+      if (updateAgreedPerson == "initiator") {
+        const updateAgree = await axios.put(
+          `${BACKEND_URL}/trades/update-agree-status`,
+          {
+            tradeId: tradeId,
+            whoAgreed: updateAgreedPerson,
+          }
+        );
+        console.log(updateAgree);
+        const updateState = await axios.put(
+          `${BACKEND_URL}/trades/update-status`,
+          {
+            tradeId: tradeId,
+            newTradeStatus: "Completed",
+          }
+        );
+        console.log(updateState);
+        setTradeStateChanged(!tradeStateChanged);
+      }
+    }
+
+    if (acceptorAgreed == false && initiatorAgreed == true) {
+      if (updateAgreedPerson == "acceptor") {
+        const response = await axios.put(
+          `${BACKEND_URL}/trades/update-agree-status`,
+          {
+            tradeId: tradeId,
+            whoAgreed: updateAgreedPerson,
+          }
+        );
+        console.log(response);
+        const updateState = await axios.put(
+          `${BACKEND_URL}/trades/update-status`,
+          {
+            tradeId: tradeId,
+            newTradeStatus: "Completed",
+          }
+        );
+        console.log(updateState);
+        setTradeStateChanged(!tradeStateChanged);
+      }
+    }
   };
 
   return (

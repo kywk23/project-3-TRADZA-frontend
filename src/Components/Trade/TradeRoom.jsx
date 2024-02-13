@@ -5,11 +5,15 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { BACKEND_URL } from "../../../constants";
 import { Button, Modal } from "react-bootstrap";
-import { useUserId } from "../Users/GetCurrentUser";
 import ChatRoom from "./ChatRoom";
 
-export default function TradeRoom() {
+export default function TradeRoom({ userId }) {
   const [tradeStatus, setTradeStatus] = useState("Ongoing");
+  const [initiatorId, setInitiatorId] = useState(0);
+  const [acceptorId, setAcceptorId] = useState(0);
+  const [initiatorAgreed, setInitiatorAgreed] = useState(false);
+  const [acceptorAgreed, setAcceptorAgreed] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
   const [user, setUser] = useState({});
   const [partner, setPartner] = useState({});
   const [userListings, setUserListings] = useState([]);
@@ -19,17 +23,24 @@ export default function TradeRoom() {
   const [tradeStateChanged, setTradeStateChanged] = useState(false);
   const [showModal, setShowModal] = useState(false);
   let { tradeId } = useParams();
-  const { currentUser } = useUserId();
-  const userId = currentUser.id;
 
   useEffect(() => {
     const fetchTradeDetails = async () => {
       try {
         const response = await axios.get(`${BACKEND_URL}/trades/${tradeId}`);
         if (response.data.tradeStatus === "Ongoing") {
-          setTradeStatus("Ongoing");
+          setInitiatorAgreed(response.data.initiatorAgreed);
+          setAcceptorAgreed(response.data.acceptorAgreed);
           const listingInitiatorId = response.data.listingInitiator;
           const listingAcceptorId = response.data.listingAcceptor;
+          setInitiatorId(listingInitiatorId);
+          setAcceptorId(listingAcceptorId);
+
+          if (listingInitiatorId == userId) {
+            setCurrentUser("initiator");
+          } else {
+            setCurrentUser("acceptor");
+          }
 
           const listingsInitiatorPromise =
             getListingsByUserId(listingInitiatorId);
@@ -66,7 +77,6 @@ export default function TradeRoom() {
               }
             });
           });
-
           if (listingInitiatorId == userId) {
             setUserListings(initiatorListings);
             setPartnerListings(acceptorListings);
@@ -139,10 +149,9 @@ export default function TradeRoom() {
     handleCloseModal();
   };
 
-  return (
-    <div className="flex flex-col items-center mx-auto max-w-6xl p-5 bg-gray-200 my-4 rounded-lg shadow">
-      <h1 className="text-3xl">Trade Room</h1>
-      {tradeStatus == "Ongoing" ? (
+  const renderBasedOnTradeStatus = (tradeStatus) => {
+    if (tradeStatus === "Ongoing") {
+      return (
         <>
           <div className="flex justify-between w-full p-2 my-4">
             <div className="flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56">
@@ -155,7 +164,7 @@ export default function TradeRoom() {
               />
             </div>
             <div className="flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-96">
-              <ChatRoom/>
+              <ChatRoom />
             </div>
             <div className="flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56">
               <UserTradeList
@@ -169,12 +178,15 @@ export default function TradeRoom() {
           <div className="flex flex-col justify-center items-center border-black border-2 w-full h-72 my-4">
             <TradingFloor
               tradeStateChanged={tradeStateChanged}
+              initiatorAgreed={initiatorAgreed}
+              acceptorAgreed={acceptorAgreed}
               setTradeStateChanged={setTradeStateChanged}
               tradeId={tradeId}
               user={user}
               partner={partner}
               userTradeBucket={userTradeBucket}
               partnerTradeBucket={partnerTradeBucket}
+              currentTradeStatus={tradeStatus}
             />
           </div>
           <div
@@ -184,9 +196,69 @@ export default function TradeRoom() {
             Cancel Trade
           </div>
         </>
+      );
+    } else if (tradeStatus === "Completed") {
+      return <div className="my-4 text-2xl">Trade Completed!</div>;
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center mx-auto max-w-6xl p-5 bg-gray-200 my-4 rounded-lg shadow">
+      <h1 className="text-3xl">Trade Room</h1>
+
+      {renderBasedOnTradeStatus(tradeStatus)}
+      {currentUser == "initiator" && initiatorAgreed ? (
+        <div className="fixed bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+            <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
+            <p>Awaiting User {acceptorId} to accept...</p>
+            <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Cancel Trade
+            </button>
+          </div>
+        </div>
       ) : null}
-      {tradeStatus == "Completed" ? (
-        <div className="my-4 text-2xl">Trade Completed!</div>
+
+      {currentUser == "initiator" && acceptorAgreed ? (
+        <div className="fixed bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+            <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
+            <p>Waiting for you to accept...</p>
+            <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Accept Trade
+            </button>
+            <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Cancel Trade
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {currentUser == "acceptor" && acceptorAgreed ? (
+        <div className="fixed bg-gray-500 bg-opacity-50 flex justify-center items-center z-30">
+          <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+            <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
+            <p>Awaiting User {initiatorId} to accept...</p>
+            <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Cancel Trade
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {currentUser == "acceptor" && initiatorAgreed ? (
+        <div className="fixed bg-gray-500 bg-opacity-50 flex justify-center items-center z-30">
+          <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+            <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
+            <p>Waiting for you to accept...</p>
+            <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Accept Trade
+            </button>
+            <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Cancel Trade
+            </button>
+          </div>
+        </div>
       ) : null}
 
       <Modal show={showModal} onHide={handleCloseModal}>
