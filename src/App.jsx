@@ -78,7 +78,7 @@ function App() {
     //Trade Room
     {
       path: "/traderoom/:tradeId",
-      element: <TradeRoom userId={userId}/>,
+      element: <TradeRoom />,
     },
     {
       path: "/initiate-trade",

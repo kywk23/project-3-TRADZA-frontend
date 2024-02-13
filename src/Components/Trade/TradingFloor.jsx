@@ -43,9 +43,7 @@ export default function TradingFloor({
     } else {
       updateAgreedPerson = "acceptor";
     }
-    console.log(updateAgreedPerson);
-    console.log(initiatorAgreed);
-    console.log(acceptorAgreed);
+
     if (initiatorAgreed == false && acceptorAgreed == false) {
       const response = await axios.put(
         `${BACKEND_URL}/trades/update-agree-status`,
@@ -56,50 +54,6 @@ export default function TradingFloor({
       );
       console.log(response);
       setTradeStateChanged(!tradeStateChanged);
-    }
-
-    if (initiatorAgreed == false && acceptorAgreed == true) {
-      if (updateAgreedPerson == "initiator") {
-        const updateAgree = await axios.put(
-          `${BACKEND_URL}/trades/update-agree-status`,
-          {
-            tradeId: tradeId,
-            whoAgreed: updateAgreedPerson,
-          }
-        );
-        console.log(updateAgree);
-        const updateState = await axios.put(
-          `${BACKEND_URL}/trades/update-status`,
-          {
-            tradeId: tradeId,
-            newTradeStatus: "Completed",
-          }
-        );
-        console.log(updateState);
-        setTradeStateChanged(!tradeStateChanged);
-      }
-    }
-
-    if (acceptorAgreed == false && initiatorAgreed == true) {
-      if (updateAgreedPerson == "acceptor") {
-        const response = await axios.put(
-          `${BACKEND_URL}/trades/update-agree-status`,
-          {
-            tradeId: tradeId,
-            whoAgreed: updateAgreedPerson,
-          }
-        );
-        console.log(response);
-        const updateState = await axios.put(
-          `${BACKEND_URL}/trades/update-status`,
-          {
-            tradeId: tradeId,
-            newTradeStatus: "Completed",
-          }
-        );
-        console.log(updateState);
-        setTradeStateChanged(!tradeStateChanged);
-      }
     }
   };
 
@@ -134,7 +88,7 @@ export default function TradingFloor({
           {" "}
           {partner.firstName}'s Trading Bucket:{" "}
         </h1>
-        <div className="flex justify-center items-center border-black border-1 mx-2 h-56">
+        <div className="flex flex-col justify-center items-center border-black border-1 mx-2 h-56">
           {partnerTradeBucket.map((listing, index) => (
             <div key={index}>{listing.name}</div>
           ))}
