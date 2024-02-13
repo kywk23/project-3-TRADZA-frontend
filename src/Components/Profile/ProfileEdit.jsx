@@ -99,58 +99,77 @@ function ProfileEdit() {
   };
 
   return (
-    <div>
-      <h1>Edit Profile</h1>
+    <div className="flex flex-col justify-center items-center">
+      {/* Hello User First Name */}
+      <div>
+        <br />
+        {currentUser && (
+          <h2 className="text-xl">
+            {" "}
+            Hello! <span className="font-semibold"> {currentUser.firstName} </span>{" "}
+          </h2>
+        )}
+      </div>
       <br />
-      {currentUser && <h2> Hello ! {currentUser.firstName} </h2>}
-      <form onSubmit={handleSubmit}>
-        <br />
-        <label>
-          <p>
-            <strong>Your Mobile Number: </strong>
-          </p>
+      {/* Start of Form */}
+      <div>
+        <form onSubmit={handleSubmit}>
+          <label>
+            <ImageUpload />
+          </label>
+          <br />
+          {/* Mobile Number */}
+          <br />
+          <label>
+            <p>
+              <strong>Your Mobile Number: </strong>
+            </p>
+            <input
+              name="mobileNumber"
+              type="number"
+              value={mobileNumber}
+              onChange={handleChange}
+              className="bg-white text-black input input-bordered input-warning w-64 flex items-center"
+            />
+          </label>
+          <br />
+          <br />
+
+          {/* Address Edits */}
+          <h2>
+            <strong>Your Address :</strong>
+          </h2>
+
+          <label>
+            Area:
+            <input
+              name="area"
+              type="text"
+              value={area}
+              onChange={handleChange}
+              className="bg-white text-black input input-bordered input-warning w-64 flex items-center"
+            />
+          </label>
+          <br />
+          <label>
+            Zip Code:
+            <input
+              name="zipCode"
+              type="number"
+              value={zipCode}
+              onChange={handleChange}
+              className="bg-white text-black input input-bordered input-warning w-64 flex items-center"
+            />
+          </label>
+          <br />
+          <br />
           <input
-            name="mobileNumber"
-            type="number"
-            value={mobileNumber}
-            onChange={handleChange}
-            placeholder="New number put here ah"
+            type="submit"
+            value="Update Profile "
+            className="btn btn-primary mt-4 px-6 py-2 rounded-full bg-blue-500 text-white font-semibold"
           />
-        </label>
-        <br />
-        <label>
-          <p> Display Picture: </p>
-          {/* this is a component  */}
-          <ImageUpload />
-        </label>
-        <br />
-        <br />
-        {/* Address Edits */}
-        <h2>
-          <strong>Your currrent Address is:</strong>
-        </h2>
-        {/* <ul>
-          {address.map((address) => (
-            <li key={address.id}>
-              <strong>Area:</strong> {address.area} <br />
-              <strong>Zip Code:</strong> {address.zipCode}
-            </li>
-          ))}
-        </ul> */}
-        <br />
-        <label>
-          Area:
-          <input name="area" type="text" value={area} onChange={handleChange} />
-        </label>
-        <br />
-        <label>
-          Zip Code:
-          <input name="zipCode" type="number" value={zipCode} onChange={handleChange} />
-        </label>
-        <br />
-        <br />
-        <input type="submit" value="Update Profile BUTTON" />
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

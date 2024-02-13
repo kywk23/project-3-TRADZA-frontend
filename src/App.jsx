@@ -98,8 +98,8 @@ function App() {
     },
     {
       path: "/chat-test",
-      element: <ChatRoom />
-    }
+      element: <ChatRoom />,
+    },
   ]);
   return (
     <>

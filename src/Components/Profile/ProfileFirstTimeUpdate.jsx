@@ -66,49 +66,67 @@ function ProfileFirstTimeUpdate() {
   };
 
   return (
-    <div>
-      <h1>Welcome onboard to Barter-Trade!</h1>
-      <h2>Let's get you set up!</h2>
-      <h2>What's your name?</h2>
+    <div className=" flex flex-col justify-center items-center">
+      <h1>
+        Welcome onboard <strong>Tradiza!</strong>
+      </h1>
       <br />
-      <form onSubmit={handleSubmit}>
-        <label>
-          First Name *:
-          <input
-            type="text"
-            required
-            name="firstName"
-            value={firstName}
-            onChange={handleChange}
-            placeholder="First Name"
-          />
-        </label>
-        <br />
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="lastName"
-            value={lastName}
-            onChange={handleChange}
-            placeholder="Last Name"
-          />
-        </label>
-        <br />
-        <label>
-          Mobile Number *:
-          <input
-            type="number"
-            required
-            name="mobileNumber"
-            value={mobileNumber}
-            onChange={handleChange}
-            placeholder="Mobile Number"
-          />
-        </label>
-        <br />
-        <input type="submit" value="Submit" />
+      <h2>Let's get to know you better!</h2>
+      <br />
+      <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              First Name<span className="text-red-500"> *</span>
+            </label>
+            {/* // First Name */}
+            <input
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+              name="firstName"
+              value={firstName}
+              onChange={handleChange}
+              type="text"
+              placeholder="Chen"
+              required
+            />
+          </div>
+          <div className="w-full md:w-1/2 px-3">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              Last Name
+            </label>
+            <input
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              type="text"
+              name="lastName"
+              value={lastName}
+              onChange={handleChange}
+              placeholder="Dol"
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="w-full px-3">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              Mobile Number<span className="text-red-500"> *</span>
+            </label>
+            <input
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              placeholder="1234 5678"
+              type="number"
+              required
+              name="mobileNumber"
+              value={mobileNumber}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <input className="btn btn-wide text-white" type="submit" value="Submit" />
+        </div>
       </form>
+      <br />
+      <p className="text-red-500 text-xs italic">Please fill out this field.</p>
+      <br />
     </div>
   );
 }

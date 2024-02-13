@@ -4,6 +4,9 @@ import axios from "axios";
 import Select from "react-select";
 import { BACKEND_URL } from "../../../constants";
 import { useUserId } from "../Users/GetCurrentUser";
+import { faHouseChimney } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
 
 export default function AddListings() {
   const { currentUser } = useUserId();
@@ -19,6 +22,7 @@ export default function AddListings() {
   });
   const [allCategories, setAllCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [listingImages, setListingImages] = useState([]);
 
   useEffect(() => {
     axios.get(`${BACKEND_URL}/categories`).then((response) => {
@@ -32,6 +36,7 @@ export default function AddListings() {
       userId: userId,
     }));
   }, [userId]);
+
   const categoryOptions = allCategories.map((category) => ({
     value: category.id,
     label: category.name,
@@ -40,7 +45,7 @@ export default function AddListings() {
   const conditionOptions = [
     { value: "new", label: "New" },
     { value: "used", label: "Used" },
-    { value: "used_once", label: "Used_once" },
+    { value: "used_once", label: "Used Once" },
   ];
 
   const handleSelectChange = (selected) => {
@@ -66,9 +71,7 @@ export default function AddListings() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const categoriesToSubmit = selectedCategories.map(
-      (category) => category.value
-    );
+    const categoriesToSubmit = selectedCategories.map((category) => category.value);
 
     axios.post(`${BACKEND_URL}/listings`, newListing).then((response) => {
       const listingId = response.data.id;
@@ -92,77 +95,100 @@ export default function AddListings() {
     });
   };
 
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setDisplayPicture(file);
-  // };
-
   return (
-    <div className="flex flex-col items-center py-1">
-      <Link
-        to="/home"
-        className="inline-block text-blue-700 hover:text-blue-300 transition duration-300 ease-in-out py-4 text-3xl"
-      >
-        Back to Home
+    <div className="flex flex-col justify-center items-center">
+      <Link to="/home">
+        <FontAwesomeIcon icon={faHouseChimney} className="hover:text-blue-500 text-3xl" />
       </Link>
-      <form
-        onSubmit={handleSubmit}
-        className="mt-8 p-4 bg-gray-300 rounded-md text-2xl"
-      >
-        <label className="block mb-2">
-          Listing Name:
-          <input
-            type="text"
-            name="name"
-            value={newListing.name}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md"
-          />
-        </label>
-        <label className="block mb-2">
-          Description:
-          <textarea
-            name="description"
-            value={newListing.description}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md"
-          ></textarea>
-        </label>
-        <label className="block mb-2">
-          Condition:
-          <Select
-            name="condition"
-            options={conditionOptions}
-            onChange={handleConditionChange}
-            className="w-full p-2 border rounded-md"
-            classNamePrefix="select"
-          />
-        </label>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Category
-          </label>
-          <Select
-            isMulti
-            options={categoryOptions}
-            onChange={handleSelectChange}
-          />
+      <br />
+      <h2 className="text-base font-semibold leading-7 text-gray-900">Add a Listing</h2>
+      <br />
+      {/* START OF FORM */}
+      <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+        {/* Display selected images */}
+        <div className="flex mt-4">
+          {listingImages.map((image, index) => (
+            <div key={index}>
+              <img src={image} className="rounded-md w-16 h-16 object-cover" />
+            </div>
+          ))}
         </div>
-        {/* <label className="block mb-2">
-          Display Picture:
-          <input
-            type="file"
-            onChange={(e) => handleFileChange(e)}
-            className="w-full p-2 border rounded-md"
-          />
-        </label> */}
+
+        {/* IMAGE UPLOAD */}
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label className="bg-white px-4 py-2 rounded-md cursor-pointer">
+              <FontAwesomeIcon icon={faCameraRetro} className="hover:text-blue-500 text-3xl" />
+              <input
+                type="file"
+                onChange={(e) => setListingImages(...e.target.files)}
+                multiple
+                className="hidden"
+              />
+            </label>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label className="block uppercase tracking-wide text-xs font-bold mb-2">Name</label>
+            {/* First Name */}
+            <input
+              className="appearance-none block w-full bg-gray-100 text-gray-700 border-2 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white border-black "
+              name="name"
+              value={newListing.name}
+              onChange={handleChange}
+              type="text"
+              required
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="w-full px-3">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              Description
+            </label>
+            <textarea
+              className="appearance-none block w-full bg-gray-100 text-gray-700 border-2 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white border-black "
+              type="text"
+              name="description"
+              value={newListing.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="w-full md:w-1/2 px-3">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              Condition
+            </label>
+            <Select
+              name="condition"
+              options={conditionOptions}
+              onChange={handleConditionChange}
+              className="w-full p-2 border rounded-md"
+              classNamePrefix="select"
+              required
+            />
+          </div>
+          <div className="w-full md:w-1/2 px-3">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              Category
+            </label>
+            <Select
+              isMulti
+              name="category"
+              options={categoryOptions}
+              onChange={handleSelectChange}
+              className="w-full p-2 border rounded-md"
+              required
+            />
+          </div>
+        </div>
+        <br />
         <div className="flex justify-center">
-          <button
-            type="submit"
-            className="bg-blue-700 text-white p-2 my-4 rounded-md"
-          >
-            Submit
-          </button>
+          <input className="btn btn-wide text-white" type="submit" value="Submit" />
         </div>
       </form>
     </div>

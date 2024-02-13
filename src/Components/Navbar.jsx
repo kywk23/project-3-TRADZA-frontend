@@ -15,9 +15,11 @@ function Navbar() {
         style={{ backgroundColor: "#000000" }}
       >
         <div className="container mx-auto flex justify-between items-center">
-          <div className="text-lg font-semibold">
+          <div>
             {/* Logo or brand name */}
-            <a href="/">Barter Trade</a>
+            <a className="btn btn-ghost font-bold text-4xl" href="/">
+              T R A D I Z A
+            </a>
           </div>
           <div className="md:hidden">
             <button onClick={() => setIsOpen(!isOpen)}>
