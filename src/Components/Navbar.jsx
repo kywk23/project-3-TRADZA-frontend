@@ -10,21 +10,16 @@ function Navbar() {
 
   return (
     <div>
-      <nav
-        className="
-       text-white
-        p-4 m-4"
-        style={{ backgroundColor: "#000000" }}
-      >
+      <nav className="text-white p-4 m-4" style={{ backgroundColor: "#000000" }}>
         <div className="container mx-auto flex justify-between items-center">
           <div>
             {/* Logo or brand name */}
-            <a className=" btn btn-ghost font-bold text-4xl" href="/">
+            <a className="btn btn-ghost font-bold text-4xl" href="/">
               T R A D I Z A
             </a>
           </div>
           <div className="flex-none">
-            <ul className="menu menu-horizontal px-1 text-xl">
+            <ul className="menu menu-horizontal px-1 text-lg">
               <li>
                 <a href="/home">Home</a>
               </li>
@@ -35,7 +30,7 @@ function Navbar() {
                       <summary>
                         <a>Trades</a>
                       </summary>
-                      <ul className="p-2 bg-black rounded-t-none">
+                      <ul className="p-2 bg-black rounded-t-none text-sm w-48">
                         <li>
                           <a href="/browse-listings">Browse</a>
                         </li>
