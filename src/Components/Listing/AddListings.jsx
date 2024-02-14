@@ -92,6 +92,7 @@ export default function AddListings() {
       setListingImageUrl(url);
 
       const response = await axios.post(`${BACKEND_URL}/listings`, newListing);
+
       const newListingId = response.data.id;
       console.log(`newListingId`, newListingId);
 
@@ -196,7 +197,10 @@ export default function AddListings() {
       <h2 className="text-base font-semibold leading-7 text-gray-900">Add a Listing</h2>
       <br />
       {/* START OF FORM */}
-      <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+      <form
+        className="w-full max-w-lg border-4 border-black rounded-xl p-12 shadow-md "
+        onSubmit={handleSubmit}
+      >
         {/* Display selected images */}
         {/* <div className="flex mt-4">
           {listingImage.map((image, index) => (
