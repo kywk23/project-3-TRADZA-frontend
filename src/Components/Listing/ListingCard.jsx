@@ -3,6 +3,7 @@ import Electronics from "../../Assets/Electronics.jpg";
 
 export default function ListingCard({ listing }) {
   // Render users_first name instead of userId
+
   return (
     <>
       <div className="card w-96 bg-base-100 shadow-xl text-white mb-5">
