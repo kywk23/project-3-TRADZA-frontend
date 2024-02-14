@@ -2,50 +2,69 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../../../constants";
 
+//Component imports
+import { useUserId } from "../Users/GetCurrentUser";
+
 function UserListings() {
-  // const [listing, setListing] = useState([]);
+  const [listing, setListing] = useState([]);
+  const [listingAndImages, setListingAndImages] = useState([]);
+  const { currentUser } = useUserId();
+  const currentUserId = currentUser.id;
 
   // useEffect to get 2 .get if want both status or single
   // bring in user CONTEXT
   // Image must have own .get
 
-  // const getListingsByUserId = async (userId) => {
-  //   try {
-  //     const response = await axios.get(`${BACKEND_URL}/listings/user-listings`, {
-  //       params: {
-  //         userId: userId,
-  //         listingStatus: true,
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Error fetching listings:", error);
-  //     throw error;
-  //   }
-  // };
+  const getListingsByUserId = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/listings/user-listings`, {
+        params: {
+          userId: currentUserId,
+          listingStatus: true,
+        },
+      });
+      setListing(response.data);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching listings:", error);
+      throw error;
+    }
+  };
 
-  const listing = [
-    {
-      id: 1,
-      title: "Shoes!",
-      description: "If a dog chews shoes whose shoes does he choose?",
-      imageUrl: "https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg",
-    },
-    {
-      id: 2,
-      title: "Rice",
-      description: "Who wants Crane rice",
-      imageUrl:
-        "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTzrCyzd7wkPVxNLPhIgncgqF1HM64cbotNw9XeESZv6_KrkIIRC2bQl7ka0aCMWBA2cRiTbPRpDUDVYRI9nGBbkc8kv0KtxqgfaIkL4PspFitD-O4IUiYCUunTkkqEJh6mPpuRMw&usqp=CAc",
-    },
-    {
-      id: 3,
-      title: "Game Boy",
-      description: "Hope can sell",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1YjOwI7kTf7IMJFUEccTIZFAem-_v9xB25g&usqp=CAU",
-    },
-  ];
+  const getListingImages = async (listingId) => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/listingImages`, {
+        params: {
+          listingId: listingId,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching images for listingId ${listingId}:`, error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const listingsData = await getListingsByUserId();
+
+      const listingsWithImages = await Promise.all(
+        listingsData.map(async (listing) => {
+          const images = await getListingImages(listing.id);
+          return { ...listing, images };
+        })
+      );
+      setListingAndImages(listingsWithImages);
+    };
+
+    fetchData();
+  }, [currentUserId]);
+
+  useEffect(() => {
+    console.log(listingAndImages);
+  });
 
   return (
     <>
@@ -97,22 +116,33 @@ function UserListings() {
       <div className="divider" />
       {/* START OF LISTINGS */}
       <div className="flex flex-wrap justify-center items-center mt-8 gap-8">
-        {listing.map((listing) => (
+        {listingAndImages.map((outerListing) => (
           <div
-            key={listing.id}
+            key={outerListing.id}
             className="card w-96 bg-base-100 shadow-xl image-full border-2 border-black first-line:"
           >
-            <figure>
-              <img
-                src={listing.imageUrl}
-                alt={listing.title}
-                className="object-cover w-full h-full"
-              />
-            </figure>
+            {outerListing.images.map((url, index) => (
+              <figure key={index}>
+                <img
+                  className="object-cover w-full h-full"
+                  src={url.url}
+                  alt={`Listing Image ${index}`}
+                />
+              </figure>
+            ))}
             {/* CARD BODY */}
             <div className="card-body">
-              <h2 className="card-title text-gray-100">{listing.title}</h2>
-              <p>{listing.description}</p>
+              <h2 className="card-title text-gray-100">{outerListing.name}</h2>
+              <p>{outerListing.description}</p>
+              <br />
+              <div className="card-actions justify-end">
+                {outerListing.categories.map((category) => (
+                  <div className="m-2 badge badge-outline text-white" key={category.id}>
+                    {category.name}
+                  </div>
+                ))}
+              </div>
+              <br />
               <div className="card-actions justify-end">
                 <button className="btn btn-black text-white">Edit Or Delete Or View</button>
               </div>

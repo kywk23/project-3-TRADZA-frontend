@@ -6,6 +6,7 @@ import axios from "axios";
 import { BACKEND_URL } from "../../../constants";
 
 const socket = socketIO.connect("http://localhost:3000/messageRoom");
+
 export default function ChatRoom({ tradeId }) {
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState("");
@@ -75,13 +76,8 @@ export default function ChatRoom({ tradeId }) {
         </div>
       </div>
       <div>
-        {isTyping ? (
-          <p className="text-sm italic text-gray-600">Someone is typing...</p>
-        ) : null}
-        <form
-          onSubmit={emitSocketMessage}
-          className="flex items-center space-x-2"
-        >
+        {isTyping ? <p className="text-sm italic text-gray-600">Someone is typing...</p> : null}
+        <form onSubmit={emitSocketMessage} className="flex items-center space-x-2">
           <input
             type="text"
             placeholder="message"

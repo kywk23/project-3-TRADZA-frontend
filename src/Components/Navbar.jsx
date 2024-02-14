@@ -10,10 +10,7 @@ function Navbar() {
 
   return (
     <div>
-      <nav
-        className="text-white p-4 m-4"
-        style={{ backgroundColor: "#000000" }}
-      >
+      <nav className="text-white p-4 m-4" style={{ backgroundColor: "#000000" }}>
         <div className="container mx-auto flex justify-between items-center">
           <div>
             {/* Logo or brand name */}

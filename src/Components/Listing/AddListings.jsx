@@ -2,8 +2,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useAuth0 } from "@auth0/auth0-react";
+
+//Component imports
 import { BACKEND_URL } from "../../../constants";
 import { useUserId } from "../Users/GetCurrentUser";
+//css imports
 import { faHouseChimney } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
@@ -11,7 +16,14 @@ import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
 export default function AddListings() {
   const { currentUser } = useUserId();
   const userId = currentUser.id;
+  const storage = getStorage();
+  const { getAccessTokenSilently } = useAuth0();
 
+  // ALL STATES
+  const [allCategories, setAllCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [listingImage, setListingImage] = useState(null);
+  const [listingImageUrl, setListingImageUrl] = useState([]);
   const [newListing, setNewListing] = useState({
     name: "",
     description: "",
@@ -20,9 +32,6 @@ export default function AddListings() {
     condition: "",
     listingStatus: true,
   });
-  const [allCategories, setAllCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [listingImages, setListingImages] = useState([]);
 
   useEffect(() => {
     axios.get(`${BACKEND_URL}/categories`).then((response) => {
@@ -69,31 +78,115 @@ export default function AddListings() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+      const categoriesToSubmit = selectedCategories.map((category) => category.value);
 
-    const categoriesToSubmit = selectedCategories.map((category) => category.value);
+      const token = await getAccessTokenSilently();
+      console.log("Access Token:", token);
 
-    axios.post(`${BACKEND_URL}/listings`, newListing).then((response) => {
-      const listingId = response.data.id;
-      return axios
-        .post(`${BACKEND_URL}/categories/create-listings-categories`, {
-          listingId: listingId,
-          categories: categoriesToSubmit,
-        })
-        .then((response) => {
-          console.log(response);
+      const storageRefInstance = ref(storage, `listingImages/${newListing.name}`);
+      const url = await uploadBytes(storageRefInstance, listingImage).then(() =>
+        getDownloadURL(storageRefInstance)
+      );
+      setListingImageUrl(url);
+
+      const response = await axios.post(`${BACKEND_URL}/listings`, newListing);
+
+      const newListingId = response.data.id;
+      console.log(`newListingId`, newListingId);
+
+      await axios.post(`${BACKEND_URL}/categories/create-listings-categories`, {
+        listingId: newListingId,
+        categories: categoriesToSubmit,
+      });
+
+      await axios
+        .post(
+          `${BACKEND_URL}/listingImages/${newListingId}`,
+          { url: url },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((postImage) => {
+          console.log("Image Post Response:", postImage);
+          setNewListing({
+            name: "",
+            description: "",
+            userId: userId,
+            numberOfLikes: 0,
+            condition: "New",
+            listingStatus: false,
+          });
         });
-    });
-
-    setNewListing({
-      name: "",
-      description: "",
-      userId: "",
-      numberOfLikes: 0,
-      condition: "New",
-      listingStatus: false,
-    });
+    } catch (error) {
+      console.error("Error handling the submission:", error);
+    }
   };
+
+  // useEffect(() => {
+  //   console.log(`listid`, listingId);
+  // });
+
+  // useEffect(() => {
+  //   const uploadImage = async () => {
+  //     try {
+  //       if (!listingId) {
+  //         console.error("Error: Listing ID is null or undefined");
+  //         return;
+  //       }
+
+  //       const uploadPromises = Array.from(listingImage).map((image) => {
+  //         const storageRefInstance = ref(storage, `listingImage/${newListing.name}`);
+  //         return uploadBytes(storageRefInstance, image).then(() =>
+  //           getDownloadURL(storageRefInstance)
+  //         );
+  //       });
+
+  //       const urls = await Promise.all(uploadPromises);
+  //       setListingImageUrl(urls);
+
+  //       const token = await getAccessTokenSilently();
+  //       console.log("Access Token:", token);
+
+  //       const response = await axios.post(
+  //         `${BACKEND_URL}/listingImage/${listingId}`,
+  //         { url: urls },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       console.log("Upload Response:", response);
+  //     } catch (error) {
+  //       console.error("Error uploading images:", error);
+  //     }
+  //   };
+  //   if (listingId !== null) {
+  //     uploadImage();
+  //   }
+  // }, [newListing]);
+
+  // useEffect(() => {
+  //   const fetchDisplayPicture = async () => {
+  //     try {
+  //       if (currentUser) {
+  //         const storageRefInstance = ref(storage, DB_STORAGE_PP_KEY + currentUser.id);
+  //         const url = await getDownloadURL(storageRefInstance);
+  //         setDisplayPictureUrl(url);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching display picture:", error);
+  //     }
+  //   };
+
+  //   fetchDisplayPicture();
+  // }, [currentUser, storage]);
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -104,27 +197,25 @@ export default function AddListings() {
       <h2 className="text-base font-semibold leading-7 text-gray-900">Add a Listing</h2>
       <br />
       {/* START OF FORM */}
-      <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+      <form
+        className="w-full max-w-lg border-4 border-black rounded-xl p-12 shadow-md "
+        onSubmit={handleSubmit}
+      >
         {/* Display selected images */}
-        <div className="flex mt-4">
-          {listingImages.map((image, index) => (
+        {/* <div className="flex mt-4">
+          {listingImage.map((image, index) => (
             <div key={index}>
-              <img src={image} className="rounded-md w-16 h-16 object-cover" />
+              <img src={listingImageUrl} className="rounded-md w-16 h-16 object-cover" />
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* IMAGE UPLOAD */}
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="bg-white px-4 py-2 rounded-md cursor-pointer">
               <FontAwesomeIcon icon={faCameraRetro} className="hover:text-blue-500 text-3xl" />
-              <input
-                type="file"
-                onChange={(e) => setListingImages(...e.target.files)}
-                multiple
-                className="hidden"
-              />
+              <input type="file" onChange={(e) => setListingImage(e.target.files[0])} />
             </label>
           </div>
         </div>
