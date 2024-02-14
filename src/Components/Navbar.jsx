@@ -15,7 +15,7 @@ function Navbar() {
           <div>
             {/* Logo or brand name */}
             <a className="btn btn-ghost font-bold text-4xl" href="/">
-              T R A D I Z A
+              T R A D Z A
             </a>
           </div>
           <div className="flex-none">

@@ -4,7 +4,7 @@ import axios from "axios";
 import Select from "react-select";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { useNavigate } from "react-router-dom";
 //Component imports
 import { BACKEND_URL } from "../../../constants";
 import { useUserId } from "../Users/GetCurrentUser";
@@ -18,7 +18,7 @@ export default function AddListings() {
   const userId = currentUser.id;
   const storage = getStorage();
   const { getAccessTokenSilently } = useAuth0();
-
+  const navigate = useNavigate();
   // ALL STATES
   const [allCategories, setAllCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -125,6 +125,7 @@ export default function AddListings() {
     } catch (error) {
       console.error("Error handling the submission:", error);
     }
+    navigate(`/mylistings`);
   };
 
   // useEffect(() => {
