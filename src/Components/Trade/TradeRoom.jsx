@@ -62,6 +62,16 @@ export default function TradeRoom() {
             acceptorDetailsPromise,
           ]);
 
+          const getInitiatorDP = await axios.get(
+            `${BACKEND_URL}/images/displaypictures/${listingInitiatorId}`
+          );
+          const getAcceptorDP = await axios.get(
+            `${BACKEND_URL}/images/displaypictures/${listingAcceptorId}`
+          );
+          console.log(getInitiatorDP.data);
+          initiatorDetails.displayPicture = getInitiatorDP.data[0].userDpUrl;
+          acceptorDetails.displayPicture = getAcceptorDP.data[0].userDpUrl;
+
           const listingsByTrade = await axios.get(
             `${BACKEND_URL}/listingsTrades/${tradeId}`
           );
@@ -168,7 +178,11 @@ export default function TradeRoom() {
             </div>
             <div className="flex flex-col bg-white justify-center items-center border-black border-2 p-3 h-96 w-96">
               <h2 className="text-xl font-bold mb-2">Chatroom</h2>
-              <ChatRoom tradeId={tradeId} />
+              <ChatRoom
+                tradeId={tradeId}
+                currUser={user}
+                currPartner={partner}
+              />
             </div>
             <div className="flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56">
               <UserTradeList

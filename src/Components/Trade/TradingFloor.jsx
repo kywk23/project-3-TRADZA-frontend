@@ -61,7 +61,7 @@ export default function TradingFloor({
     <div className="flex w-full items-center">
       <div className="flex-1">
         <h1 className="flex justify-center p-2">
-          {user.firstName}'s' Trading Bucket:{" "}
+          {user.firstName}'s Trading Bucket:{" "}
         </h1>
         <div className="flex flex-col justify-center items-center border-black border-1 mx-2 h-56">
           {userTradeBucket.map((listing, index) => (
