@@ -237,7 +237,7 @@ export default function TradeRoom() {
 
       {renderBasedOnTradeStatus(tradeStatus)}
       {currUser == "initiator" && initiatorAgreed ? (
-        <div className="fixed bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
           <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
             <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
             <p>Awaiting User {acceptorId} to accept...</p>
@@ -267,7 +267,7 @@ export default function TradeRoom() {
       ) : null}
 
       {currUser == "acceptor" && acceptorAgreed ? (
-        <div className="fixed bg-gray-500 bg-opacity-50 flex justify-center items-center z-30">
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-30">
           <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
             <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
             <p>Awaiting User {initiatorId} to accept...</p>

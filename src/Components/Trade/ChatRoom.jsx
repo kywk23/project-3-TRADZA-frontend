@@ -18,6 +18,7 @@ export default function ChatRoom({ tradeId }) {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(`${BACKEND_URL}/messages/${tradeId}`);
+        console.log(response.data)
         setMessages(response.data.messages);
       } catch (error) {
         console.error("Failed to fetch messages:", error);
@@ -50,7 +51,10 @@ export default function ChatRoom({ tradeId }) {
   };
 
   useEffect(() => {
-    socket.on("messageResponse", (data) => setMessages([...messages, data]));
+    socket.on("messageResponse", (data) => {
+      console.log("Receiving Message!")
+      console.log(data)
+      setMessages([...messages, data])} );
   }, [socket, messages]);
 
   useEffect(() => {
