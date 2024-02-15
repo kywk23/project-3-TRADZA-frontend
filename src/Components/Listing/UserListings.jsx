@@ -129,8 +129,11 @@ function UserListings() {
               <br />
               <div className="card-actions justify-end">
                 {outerListing.categories.map((category) => (
-                  <div className="m-2 badge badge-outline text-white" key={category.id}>
-                    {category.name}
+                  <div className="m-2 badge badge-outline  text-white" key={category.id}>
+                    {category.name
+                      .split("_")
+                      .map((word) => word.toUpperCase())
+                      .join(" ")}
                   </div>
                 ))}
               </div>

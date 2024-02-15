@@ -31,9 +31,11 @@ export default function ListingCard({ listing }) {
 
           <div className="card-actions justify-end">
             {listing.categories.map((category) => (
-              <div className="badge badge-outline" key={category.id}>
-                {" "}
-                {category.name}
+              <div className="m-2 badge badge-outline " key={category.id}>
+                {category.name
+                  .split("_")
+                  .map((word) => word.toUpperCase())
+                  .join(" ")}
               </div>
             ))}
           </div>
