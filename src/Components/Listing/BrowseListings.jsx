@@ -12,7 +12,7 @@ export default function BrowseListings() {
   const fetchAllListings = async () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/listings`);
-      console.log(response);
+      console.log(`get request res`, response.data);
       setListings(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -26,19 +26,23 @@ export default function BrowseListings() {
   return (
     <div className="flex flex-col items-center py-1 text-3xl">
       <Link to="/home">
-        <FontAwesomeIcon icon={faHouseChimney} className="hover:text-blue-500 text-3xl" />
+        <FontAwesomeIcon icon={faHouseChimney} className="hover:text-orange-500 text-3xl" />
       </Link>
       <br />
-      <h2>Browse Listings</h2>
+      <div className="divider divider-neutral">
+        <h2 className="font-bold text-lg">BROWSE LISTINGS</h2>
+      </div>
+
       <div className="flex p-2">
-        <div className="p-2 text-2xl bg-blue-500 mx-3 hover:text-white cursor-pointer">
+        <div className="p-2 text-2xl bg-orange-500 mx-3 rounded hover:text-white cursor-pointer">
           All Listings
         </div>
-        <div className="p-2 text-2xl bg-blue-500 mx-3 rounded hover:text-white cursor-pointer">
+        <div className="p-2 text-2xl bg-orange-500 mx-3 rounded hover:text-white cursor-pointer">
           By User
         </div>
       </div>
-      <div className="divider" />
+      <br />
+
       <div className="flex flex-wrap justify-center items-start py-1 text-3xl w-full">
         {listings.map((listing, index) => (
           <div key={index} className="w-full md:w-1/2 lg:w-1/4 xl:w-1/4 px-4 mb-4">

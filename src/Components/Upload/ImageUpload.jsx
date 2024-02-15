@@ -4,13 +4,17 @@ import { useUserId } from "../Users/GetCurrentUser";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { BACKEND_URL } from "../../../constants";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function ImageUpload() {
   const storage = getStorage();
   const { currentUser } = useUserId();
+  const currentUserId = currentUser.id;
   const [displayPictureUrl, setDisplayPictureUrl] = useState("");
   const [fileValue, setFileValue] = useState(null);
-
+  const { getAccessTokenSilently } = useAuth0();
   const uploadImage = async () => {
     try {
       const storageRefInstance = ref(storage, fileValue.name);
@@ -22,11 +26,24 @@ function ImageUpload() {
       console.log(`getDownloadurl`, getDownloadURL);
       setDisplayPictureUrl(url);
       console.log(`url`, url);
+      const token = await getAccessTokenSilently();
+      const uploadDpToDatabase = await axios.post(
+        `${BACKEND_URL}/images/displaypictures/${currentUserId}`,
+        {
+          userDpUrl: url,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
     } catch (error) {
       console.error("Error uploading image:", error);
     }
   };
 
+  // CHANGE FETCH/RENDER IMAGE TO POSTGRES
   useEffect(() => {
     const fetchDisplayPicture = async () => {
       try {

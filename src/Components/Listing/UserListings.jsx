@@ -11,10 +11,6 @@ function UserListings() {
   const { currentUser } = useUserId();
   const currentUserId = currentUser.id;
 
-  // useEffect to get 2 .get if want both status or single
-  // bring in user CONTEXT
-  // Image must have own .get
-
   const getListingsByUserId = async () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/listings/user-listings`, {
@@ -24,7 +20,7 @@ function UserListings() {
         },
       });
       setListing(response.data);
-      console.log(response);
+      console.log(`res data`, response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching listings:", error);
@@ -123,22 +119,21 @@ function UserListings() {
           >
             {outerListing.images.map((url, index) => (
               <figure key={index}>
-                <img
-                  className="object-cover w-full h-full"
-                  src={url.url}
-                  alt={`Listing Image ${index}`}
-                />
+                <img className="object-cover w-full h-full" src={url.url} />
               </figure>
             ))}
             {/* CARD BODY */}
             <div className="card-body">
-              <h2 className="card-title text-gray-100">{outerListing.name}</h2>
+              <h2 className="card-title text-white">{outerListing.name}</h2>
               <p>{outerListing.description}</p>
               <br />
               <div className="card-actions justify-end">
                 {outerListing.categories.map((category) => (
-                  <div className="m-2 badge badge-outline text-white" key={category.id}>
-                    {category.name}
+                  <div className="m-2 badge badge-outline  text-white" key={category.id}>
+                    {category.name
+                      .split("_")
+                      .map((word) => word.toUpperCase())
+                      .join(" ")}
                   </div>
                 ))}
               </div>

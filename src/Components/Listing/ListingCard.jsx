@@ -1,33 +1,47 @@
-import { Card, Row, Col } from "react-bootstrap";
 import Electronics from "../../Assets/Electronics.jpg";
 
 export default function ListingCard({ listing }) {
-  // Render users_first name instead of userId
+  console.log(listing);
+  const listingConditions = listing.conditions;
+
+  const formattedConditions = listingConditions
+    ? listingConditions
+        .split("_")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    : null;
+
+  const displayPictureUrl = listing.listing_display_pictures[0]?.url || Electronics;
 
   return (
     <>
-      <div className="card w-96 bg-base-100 shadow-xl text-white mb-5">
+      <div className="card m-auto w-96 bg-base-200 shadow-xl text-white mb-5">
         <figure>
-          <img src={Electronics} alt="elect" />
+          <img src={displayPictureUrl} alt="elect" />
         </figure>
         <div className="card-body">
-          <h2 className="card-title">
+          <h2 className="card-title text-2xl">
             {listing.name}
-            <div className="badge badge-secondary">{listing.conditions}</div>
+            <div className="badge badge-secondary">{formattedConditions}</div>
           </h2>
-          <p style={{ fontSize: "17px" }}>
-            <strong>{listing.description}</strong>
-          </p>
-          <p style={{ fontSize: "12px" }}>Listing Unique ID: {listing.id}</p>
-          <p style={{ fontSize: "12px" }}>Listed By: {listing.userId}</p>
+          <br />
+          <p className="text-sm">{listing.description}</p>
+          <br />
+          <p className="text-xs p-2">By: {listing.user.firstName}</p>
 
           <div className="card-actions justify-end">
-            <div className="badge badge-outline">Fashion - this is hard coded</div>
-            <div className="badge badge-outline">Products</div>
+            {listing.categories.map((category) => (
+              <div className="m-2 badge badge-outline " key={category.id}>
+                {category.name
+                  .split("_")
+                  .map((word) => word.toUpperCase())
+                  .join(" ")}
+              </div>
+            ))}
           </div>
         </div>
       </div>
-      <div className="divider divider-info"></div>
+      <div className="divider divider-neutral" />
     </>
   );
 }

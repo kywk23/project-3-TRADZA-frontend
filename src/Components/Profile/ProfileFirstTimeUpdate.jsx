@@ -52,7 +52,8 @@ function ProfileFirstTimeUpdate() {
             },
           }
         );
-
+        // UPLOAD A PLACEHOLDER/DEFAULT DP FOR USERS to postgre
+        // const uploadDefaultDP = await axios.post;
         console.log(`Response:`, response.data);
         console.log(firstName, lastName, mobileNumber);
         setFirstName("");
@@ -68,7 +69,7 @@ function ProfileFirstTimeUpdate() {
   return (
     <div className=" flex flex-col justify-center items-center">
       <h1>
-        Welcome onboard <strong>Tradiza!</strong>
+        Welcome onboard <strong>Tradza!</strong>
       </h1>
       <br />
       <h2>Let's get to know you better!</h2>
