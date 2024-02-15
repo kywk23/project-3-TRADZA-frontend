@@ -193,7 +193,15 @@ export default function TradeRoom() {
               />
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center border-black border-2 w-full h-72 my-4">
+          <div
+            className={`flex flex-col justify-center items-center border-black border-2 w-full h-72 my-4 ${
+              (currUser === "initiator" &&
+                (initiatorAgreed || acceptorAgreed)) ||
+              (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
+                ? "pointer-events-none opacity-50"
+                : ""
+            }`}
+          >
             <TradingFloor
               tradeStateChanged={tradeStateChanged}
               initiatorAgreed={initiatorAgreed}
@@ -207,6 +215,54 @@ export default function TradeRoom() {
               currentTradeStatus={tradeStatus}
             />
           </div>
+          {currUser == "initiator" && initiatorAgreed ? (
+            <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+              <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
+              <p>Awaiting User {acceptorId} to accept...</p>
+            </div>
+          ) : null}
+          {currUser == "initiator" && acceptorAgreed ? (
+            <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+              <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
+              <p>Waiting for you to accept...</p>
+              <button
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={handleAcceptTrade}
+              >
+                Accept Trade
+              </button>
+              <button
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={handleUnlockAndEdit}
+              >
+                Unlock Trade and Edit
+              </button>
+            </div>
+          ) : null}
+          {currUser == "acceptor" && acceptorAgreed ? (
+            <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+              <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
+              <p>Awaiting User {initiatorId} to accept...</p>
+            </div>
+          ) : null}
+          {currUser == "acceptor" && initiatorAgreed ? (
+            <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+              <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
+              <p>Waiting for you to accept...</p>
+              <button
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={handleAcceptTrade}
+              >
+                Accept Trade
+              </button>
+              <button
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={handleUnlockAndEdit}
+              >
+                Unlock Trade and Edit
+              </button>
+            </div>
+          ) : null}
           <div
             className="border-black border-1 mx-2 p-3 cursor-pointer"
             onClick={handleShowModal}
@@ -250,65 +306,6 @@ export default function TradeRoom() {
       <h1 className="text-3xl">Trade Room</h1>
 
       {renderBasedOnTradeStatus(tradeStatus)}
-      {currUser == "initiator" && initiatorAgreed ? (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
-            <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
-            <p>Awaiting User {acceptorId} to accept...</p>
-          </div>
-        </div>
-      ) : null}
-
-      {currUser == "initiator" && acceptorAgreed ? (
-        <div className="fixed bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
-            <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
-            <p>Waiting for you to accept...</p>
-            <button
-              className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleAcceptTrade}
-            >
-              Accept Trade
-            </button>
-            <button
-              className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleUnlockAndEdit}
-            >
-              Unlock Trade and Edit
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {currUser == "acceptor" && acceptorAgreed ? (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-30">
-          <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
-            <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
-            <p>Awaiting User {initiatorId} to accept...</p>
-          </div>
-        </div>
-      ) : null}
-
-      {currUser == "acceptor" && initiatorAgreed ? (
-        <div className="fixed bg-gray-500 bg-opacity-50 flex justify-center items-center z-30">
-          <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
-            <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
-            <p>Waiting for you to accept...</p>
-            <button
-              className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleAcceptTrade}
-            >
-              Accept Trade
-            </button>
-            <button
-              className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleUnlockAndEdit}
-            >
-              Unlock Trade and Edit
-            </button>
-          </div>
-        </div>
-      ) : null}
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>

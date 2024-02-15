@@ -25,6 +25,19 @@ export default function TradingFloor({
       const response = await axios.delete(
         `${BACKEND_URL}/listingsTrades/${listingTradeId}`
       );
+
+      axios
+        .put(`${BACKEND_URL}/listings/change-reserved-status`, {
+          newListingReservedStatus: false,
+          listingId: listingId,
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       setTradeStateChanged(!tradeStateChanged);
     } catch (error) {
       console.error("There was an error deleting the listing:", error);

@@ -24,8 +24,21 @@ export default function UserTradeList({
         tradeId: tradeId,
         listingId: selectedListing.id,
       })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    axios
+      .put(`${BACKEND_URL}/listings/change-reserved-status`, {
+        newListingReservedStatus: true,
+        listingId: selectedListing.id,
+      })
       .then((response) => {
+        console.log(response);
         setTradeStateChanged(!tradeStateChanged);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
