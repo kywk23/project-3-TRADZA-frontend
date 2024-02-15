@@ -2,7 +2,7 @@ import UserTradeList from "./UserTradeList";
 import TradingFloor from "./TradingFloor";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../../constants";
 import { Button, Modal } from "react-bootstrap";
 import ChatRoom from "./ChatRoom";
@@ -26,6 +26,7 @@ export default function TradeRoom() {
   let { tradeId } = useParams();
   const { currentUser } = useUserId();
   const userId = currentUser.id;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTradeDetails = async () => {
@@ -45,8 +46,10 @@ export default function TradeRoom() {
             setCurrUser("acceptor");
           }
 
-          const listingsInitiatorPromise = getListingsByUserId(listingInitiatorId);
-          const listingsAcceptorPromise = getListingsByUserId(listingAcceptorId);
+          const listingsInitiatorPromise =
+            getListingsByUserId(listingInitiatorId);
+          const listingsAcceptorPromise =
+            getListingsByUserId(listingAcceptorId);
 
           const [initiatorListings, acceptorListings] = await Promise.all([
             listingsInitiatorPromise,
@@ -66,11 +69,12 @@ export default function TradeRoom() {
           const getAcceptorDP = await axios.get(
             `${BACKEND_URL}/images/displaypictures/${listingAcceptorId}`
           );
-          console.log(getInitiatorDP.data);
           initiatorDetails.displayPicture = getInitiatorDP.data[0].userDpUrl;
           acceptorDetails.displayPicture = getAcceptorDP.data[0].userDpUrl;
 
-          const listingsByTrade = await axios.get(`${BACKEND_URL}/listingsTrades/${tradeId}`);
+          const listingsByTrade = await axios.get(
+            `${BACKEND_URL}/listingsTrades/${tradeId}`
+          );
           const tradeBucket = listingsByTrade.data;
           const initiatorTrades = [];
           const acceptorTrades = [];
@@ -117,12 +121,15 @@ export default function TradeRoom() {
 
   const getListingsByUserId = async (userId) => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/listings/user-listings`, {
-        params: {
-          userId: userId,
-          listingStatus: true,
-        },
-      });
+      const response = await axios.get(
+        `${BACKEND_URL}/listings/user-listings`,
+        {
+          params: {
+            userId: userId,
+            listingStatus: true,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching listings:", error);
@@ -143,25 +150,20 @@ export default function TradeRoom() {
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
 
-  const handleCancelTrade = async () => {
-    const response = await axios.delete(`${BACKEND_URL}/trades/delete-trade`, {
-      data: { tradeId: tradeId },
-    });
-
-    if (response.data.success) {
-      console.log(response.data.msg);
-    } else {
-      console.error(response.data.msg);
-    }
-    handleCloseModal();
-  };
-
   const renderBasedOnTradeStatus = (tradeStatus) => {
     if (tradeStatus === "Ongoing") {
       return (
         <>
           <div className="flex justify-between w-full p-2 my-4">
-            <div className="flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56">
+            <div
+              className={`flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56 ${
+                (currUser === "initiator" &&
+                  (initiatorAgreed || acceptorAgreed)) ||
+                (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
+                  ? "pointer-events-none opacity-50"
+                  : ""
+              }`}
+            >
               <UserTradeList
                 tradeStateChanged={tradeStateChanged}
                 setTradeStateChanged={setTradeStateChanged}
@@ -172,9 +174,21 @@ export default function TradeRoom() {
             </div>
             <div className="flex flex-col bg-white justify-center items-center border-black border-2 p-3 h-96 w-96">
               <h2 className="text-xl font-bold mb-2">Chatroom</h2>
-              <ChatRoom tradeId={tradeId} currUser={user} currPartner={partner} />
+              <ChatRoom
+                tradeId={tradeId}
+                currUser={user}
+                currPartner={partner}
+              />
             </div>
-            <div className="flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56">
+            <div
+              className={`flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56 ${
+                (currUser === "initiator" &&
+                  (initiatorAgreed || acceptorAgreed)) ||
+                (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
+                  ? "pointer-events-none opacity-50"
+                  : ""
+              }`}
+            >
               <UserTradeList
                 acceptorState={true}
                 tradeId={tradeId}
@@ -182,27 +196,6 @@ export default function TradeRoom() {
                 userListings={partnerListings}
               />
             </div>
-          </div>
-          <div
-            className={`flex flex-col justify-center items-center border-black border-2 w-full h-72 my-4 ${
-              (currUser === "initiator" && (initiatorAgreed || acceptorAgreed)) ||
-              (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
-                ? "pointer-events-none opacity-50"
-                : ""
-            }`}
-          >
-            <TradingFloor
-              tradeStateChanged={tradeStateChanged}
-              initiatorAgreed={initiatorAgreed}
-              acceptorAgreed={acceptorAgreed}
-              setTradeStateChanged={setTradeStateChanged}
-              tradeId={tradeId}
-              user={user}
-              partner={partner}
-              userTradeBucket={userTradeBucket}
-              partnerTradeBucket={partnerTradeBucket}
-              currentTradeStatus={tradeStatus}
-            />
           </div>
           {currUser == "initiator" && initiatorAgreed ? (
             <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
@@ -252,7 +245,33 @@ export default function TradeRoom() {
               </button>
             </div>
           ) : null}
-          <div className="border-black border-1 mx-2 p-3 cursor-pointer" onClick={handleShowModal}>
+          <div
+            className={`flex flex-col justify-center items-center border-black border-2 w-full h-72 my-4 ${
+              (currUser === "initiator" &&
+                (initiatorAgreed || acceptorAgreed)) ||
+              (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
+                ? "pointer-events-none opacity-50"
+                : ""
+            }`}
+          >
+            <TradingFloor
+              tradeStateChanged={tradeStateChanged}
+              initiatorAgreed={initiatorAgreed}
+              acceptorAgreed={acceptorAgreed}
+              setTradeStateChanged={setTradeStateChanged}
+              tradeId={tradeId}
+              user={user}
+              partner={partner}
+              userTradeBucket={userTradeBucket}
+              partnerTradeBucket={partnerTradeBucket}
+              currentTradeStatus={tradeStatus}
+            />
+          </div>
+
+          <div
+            className="border-black border-1 mx-2 p-3 cursor-pointer"
+            onClick={handleShowModal}
+          >
             Cancel Trade
           </div>
         </>
@@ -285,6 +304,40 @@ export default function TradeRoom() {
     });
     console.log(updateState);
     setTradeStateChanged(!tradeStateChanged);
+  };
+
+  const handleCancelTrade = async () => {
+    const combinedBucket = [...userTradeBucket, ...partnerTradeBucket];
+
+    const listings = combinedBucket.map((obj) => {
+      const newListing = {
+        listingId: obj.id,
+        newListingReservedStatus: false,
+      };
+      return newListing;
+    });
+
+    const response = await axios.delete(`${BACKEND_URL}/trades/delete-trade`, {
+      data: { tradeId: tradeId },
+    });
+
+    if (response.data.success) {
+      console.log(response.data.msg);
+    } else {
+      console.error(response.data.msg);
+    }
+
+    axios
+      .put(`${BACKEND_URL}/listings/change-reserved-statuses`, listings)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    handleCloseModal();
+    navigate("/user-trades");
   };
 
   return (

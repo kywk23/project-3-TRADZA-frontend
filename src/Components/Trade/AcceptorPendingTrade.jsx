@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../../constants";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 export default function AcceptorPendingTrade() {
   const [tradeDetails, setTradeDetails] = useState({});
   const [initiatorListing, setInitiatorListing] = useState({});
   const [acceptorListing, setAcceptorListing] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const [searchParams] = useSearchParams();
   const newTradeId = searchParams.get("trade");
   const navigate = useNavigate();
@@ -76,11 +77,24 @@ export default function AcceptorPendingTrade() {
       tradeId: newTradeId,
       newTradeStatus: "Ongoing",
     });
-    console.log(response);
+
+    await axios
+      .put(`${BACKEND_URL}/listings/change-reserved-status`, {
+        newListingReservedStatus: true,
+        listingId: acceptorListing.id,
+      }).then((response) => {
+        console.log(response)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     navigate(`/traderoom/${newTradeId}`);
   };
 
-  const handleRejectTrade = async () => {
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+
+  const handleCancelTrade = async () => {
     const response = await axios.delete(`${BACKEND_URL}/trades/delete-trade`, {
       data: { tradeId: newTradeId },
     });
@@ -90,6 +104,21 @@ export default function AcceptorPendingTrade() {
     } else {
       console.error(response.data.msg);
     }
+
+    axios
+      .put(`${BACKEND_URL}/listings/change-reserved-status`, {
+        newListingReservedStatus: false,
+        listingId: initiatorListing.id,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    handleCloseModal();
+    navigate("/user-trades");
   };
 
   return (
@@ -118,12 +147,26 @@ export default function AcceptorPendingTrade() {
           </Button>
           <Button
             style={{ margin: "1rem", backgroundColor: "darkcyan" }}
-            onClick={handleRejectTrade}
+            onClick={handleShowModal}
           >
             Reject Trade
           </Button>
         </div>
       </div>
+
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Are you sure you want to cancel trade?</Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCancelTrade}>
+            Cancel Trade
+          </Button>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

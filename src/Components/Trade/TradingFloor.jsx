@@ -68,6 +68,7 @@ export default function TradingFloor({
       console.log(response);
       setTradeStateChanged(!tradeStateChanged);
     }
+    
   };
 
   return (
