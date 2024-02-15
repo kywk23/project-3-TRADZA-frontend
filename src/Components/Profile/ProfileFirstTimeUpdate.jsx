@@ -52,7 +52,8 @@ function ProfileFirstTimeUpdate() {
             },
           }
         );
-
+        // UPLOAD A PLACEHOLDER/DEFAULT DP FOR USERS to postgre
+        // const uploadDefaultDP = await axios.post;
         console.log(`Response:`, response.data);
         console.log(firstName, lastName, mobileNumber);
         setFirstName("");

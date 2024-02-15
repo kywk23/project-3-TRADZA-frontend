@@ -45,10 +45,8 @@ export default function TradeRoom() {
             setCurrUser("acceptor");
           }
 
-          const listingsInitiatorPromise =
-            getListingsByUserId(listingInitiatorId);
-          const listingsAcceptorPromise =
-            getListingsByUserId(listingAcceptorId);
+          const listingsInitiatorPromise = getListingsByUserId(listingInitiatorId);
+          const listingsAcceptorPromise = getListingsByUserId(listingAcceptorId);
 
           const [initiatorListings, acceptorListings] = await Promise.all([
             listingsInitiatorPromise,
@@ -61,7 +59,7 @@ export default function TradeRoom() {
             initiatorDetailsPromise,
             acceptorDetailsPromise,
           ]);
-
+          // WORKS TILL HERE
           const getInitiatorDP = await axios.get(
             `${BACKEND_URL}/images/displaypictures/${listingInitiatorId}`
           );
@@ -72,9 +70,7 @@ export default function TradeRoom() {
           initiatorDetails.displayPicture = getInitiatorDP.data[0].userDpUrl;
           acceptorDetails.displayPicture = getAcceptorDP.data[0].userDpUrl;
 
-          const listingsByTrade = await axios.get(
-            `${BACKEND_URL}/listingsTrades/${tradeId}`
-          );
+          const listingsByTrade = await axios.get(`${BACKEND_URL}/listingsTrades/${tradeId}`);
           const tradeBucket = listingsByTrade.data;
           const initiatorTrades = [];
           const acceptorTrades = [];
@@ -90,6 +86,7 @@ export default function TradeRoom() {
               }
             });
           });
+
           if (listingInitiatorId == userId) {
             setUserListings(initiatorListings);
             setPartnerListings(acceptorListings);
@@ -120,15 +117,12 @@ export default function TradeRoom() {
 
   const getListingsByUserId = async (userId) => {
     try {
-      const response = await axios.get(
-        `${BACKEND_URL}/listings/user-listings`,
-        {
-          params: {
-            userId: userId,
-            listingStatus: true,
-          },
-        }
-      );
+      const response = await axios.get(`${BACKEND_URL}/listings/user-listings`, {
+        params: {
+          userId: userId,
+          listingStatus: true,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching listings:", error);
@@ -178,11 +172,7 @@ export default function TradeRoom() {
             </div>
             <div className="flex flex-col bg-white justify-center items-center border-black border-2 p-3 h-96 w-96">
               <h2 className="text-xl font-bold mb-2">Chatroom</h2>
-              <ChatRoom
-                tradeId={tradeId}
-                currUser={user}
-                currPartner={partner}
-              />
+              <ChatRoom tradeId={tradeId} currUser={user} currPartner={partner} />
             </div>
             <div className="flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56">
               <UserTradeList
@@ -195,8 +185,7 @@ export default function TradeRoom() {
           </div>
           <div
             className={`flex flex-col justify-center items-center border-black border-2 w-full h-72 my-4 ${
-              (currUser === "initiator" &&
-                (initiatorAgreed || acceptorAgreed)) ||
+              (currUser === "initiator" && (initiatorAgreed || acceptorAgreed)) ||
               (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
                 ? "pointer-events-none opacity-50"
                 : ""
@@ -263,10 +252,7 @@ export default function TradeRoom() {
               </button>
             </div>
           ) : null}
-          <div
-            className="border-black border-1 mx-2 p-3 cursor-pointer"
-            onClick={handleShowModal}
-          >
+          <div className="border-black border-1 mx-2 p-3 cursor-pointer" onClick={handleShowModal}>
             Cancel Trade
           </div>
         </>
