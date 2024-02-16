@@ -50,15 +50,17 @@ export default function UserTradeList({
         className="w-20 h-20 mb-4 rounded-full object-cover"
       />
       <h1 className="text-lg font-bold">Name: {user.firstName}</h1>
-      <div style={{ overflowY: "auto" }} className="my-2 w-full h-40 ">
+      <div style={{ overflowY: "auto" }} className="my-2 w-full h-30 ">
         <div className="mb-2">
-          <strong>Unsold Items:</strong>
+          <strong>Available Items:</strong>
         </div>
         {userListings.map((listing, index) =>
           listing.reserved == false ? (
             <div
               className={`bg-blue-500 ${
-                selectedListingIndex === index ? "bg-blue-700" : "hover:bg-blue-600"
+                selectedListingIndex === index
+                  ? "bg-blue-700"
+                  : "hover:bg-blue-600"
               } text-white py-2 px-4 m-1 rounded-lg cursor-pointer transition duration-150 ease-in-out`}
               key={index}
               onClick={() => handleClick(index)}

@@ -11,7 +11,7 @@ export default function BrowseListings() {
 
   const fetchAllListings = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/listings`);
+      const response = await axios.get(`${BACKEND_URL}/listings/available-listings`);
       console.log(`get request res`, response.data);
       setListings(response.data);
     } catch (error) {

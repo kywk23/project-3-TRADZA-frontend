@@ -84,14 +84,15 @@ export default function AllUserTrades() {
           {pendingInitiatorTrades.map((trade, index) => (
             <div key={index}>
               <Link to={`/user-trades/pending/initiator?trade=${trade.id}`}>
-                {trade.id} - Waiting for {trade.listingAcceptor} to accept!
+                Trade ID {trade.id} - Waiting for {trade.listingAcceptor} to
+                accept!
               </Link>
             </div>
           ))}
           {pendingAcceptorTrades.map((trade, index) => (
             <div key={index}>
               <Link to={`/user-trades/pending/acceptor?trade=${trade.id}`}>
-                {trade.id} - Waiting for you to accept!
+                Trade ID {trade.id} - Waiting for you to accept!
               </Link>
             </div>
           ))}
@@ -102,12 +103,7 @@ export default function AllUserTrades() {
         <div className="border-black border-2 p-3 h-96 w-96">
           {ongoingTrades.map((trade, index) => (
             <div key={index}>
-              <Link to={`/traderoom/${trade.id}`}>{trade.id}</Link>
-            </div>
-          ))}
-          {pendingCompletedTrades.map((trade, index) => (
-            <div key={index}>
-              <Link to={`/traderoom/${trade.id}`}>{trade.id}</Link>
+              <Link to={`/traderoom/${trade.id}`}>Trade ID {trade.id}</Link>
             </div>
           ))}
         </div>
@@ -117,7 +113,7 @@ export default function AllUserTrades() {
         <div className="border-black border-2 p-3 h-96 w-96">
           {completedTrades.map((trade, index) => (
             <div key={index}>
-              <Link to={`/traderoom/${trade.id}`}>{trade.id}</Link>
+              <Link to={`/traderoom/${trade.id}`}>Trade ID {trade.id}</Link>
             </div>
           ))}
         </div>

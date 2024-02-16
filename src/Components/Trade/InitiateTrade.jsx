@@ -40,7 +40,7 @@ export default function InitiateTrade() {
 
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleInitiateTrade = () => {
     axios
       .post(`${BACKEND_URL}/trades`, {
         listingInitiator: userId,
@@ -69,6 +69,15 @@ export default function InitiateTrade() {
           .catch((error) => {
             console.error("An error occurred linking listings:", error);
           });
+
+        axios
+          .put(`${BACKEND_URL}/listings/change-reserved-status`, {
+            newListingReservedStatus: true,
+            listingId: chosenListing.id,
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((error) => {
         console.error("An error occurred:", error);
@@ -82,6 +91,10 @@ export default function InitiateTrade() {
       }
     });
     setActiveIndex(index);
+  };
+
+  const handleCancelTrade = async () => {
+    navigate("/browse-listings");
   };
 
   return (
@@ -104,12 +117,20 @@ export default function InitiateTrade() {
             </button>
           ))}
         </div>
-        <Button
-          style={{ margin: "1rem", backgroundColor: "darkcyan" }}
-          onClick={handleClick}
-        >
-          Initiate Trade
-        </Button>
+        <div className="flex my-2">
+          <Button
+            style={{ margin: "1rem", backgroundColor: "darkcyan" }}
+            onClick={handleInitiateTrade}
+          >
+            Initiate Trade
+          </Button>
+          <Button
+            style={{ margin: "1rem", backgroundColor: "darkcyan" }}
+            onClick={handleCancelTrade}
+          >
+            Cancel Trade
+          </Button>
+        </div>
       </div>
     </div>
   );

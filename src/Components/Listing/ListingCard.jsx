@@ -11,11 +11,23 @@ export default function ListingCard({ listing }) {
         .join(" ")
     : null;
 
-  const displayPictureUrl = listing.listing_display_pictures[0]?.url || Electronics;
+  const displayPictureUrl =
+    listing.listing_display_pictures[0]?.url || Electronics;
 
   return (
     <>
-      <div className="card m-auto w-96 bg-base-200 shadow-xl text-white mb-5">
+      <div
+        className={`card m-auto w-96 bg-base-200 shadow-xl text-white mb-5 ${
+          listing.reserved ? "pointer-events-none opacity-50" : ""
+        }`}
+        style={{ position: "relative" }}
+      >
+        {console.log(listing)}
+        {listing.reserved ? (
+          <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-50 font-bold text-white z-10">
+            Reserved
+          </div>
+        ) : null}
         <figure>
           <img src={displayPictureUrl} alt="elect" />
         </figure>
