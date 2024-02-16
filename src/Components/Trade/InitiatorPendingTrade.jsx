@@ -11,19 +11,21 @@ export default function InitiatorPendingTrade() {
   const [searchParams] = useSearchParams();
   const [showModal, setShowModal] = useState(false);
   const newTradeId = searchParams.get("trade");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTradeDetails = async () => {
       try {
         const response = await axios.get(`${BACKEND_URL}/trades/${newTradeId}`);
         setTradeDetails(response.data);
+
         const initiatorId = response.data.listingInitiator;
         const acceptorId = response.data.listingAcceptor;
 
         const listingsByTrade = await axios.get(
           `${BACKEND_URL}/listingsTrades/${newTradeId}`
         );
+
         const listingId1 = listingsByTrade.data[0].listingId;
         const listingId2 = listingsByTrade.data[1].listingId;
 
@@ -36,13 +38,15 @@ export default function InitiatorPendingTrade() {
         ]);
 
         initiatorListings.forEach((listing) => {
-          listing.id == listingId1 ? setInitiatorListing(listing) : null;
+          console.log("Comparing:", listing.id, listingId1);
+          console.log("Comparing:", listing.id, listingId2);
+          listing.id == listingId1 ? setInitiatorListing(listing)  : null;
           listing.id == listingId2 ? setInitiatorListing(listing) : null;
         });
 
         acceptorListings.forEach((listing) => {
-          listing.id == listingId1 ? null : setAcceptorListing(listing);
-          listing.id == listingId2 ? null : setAcceptorListing(listing);
+          listing.id == listingId1 ? setAcceptorListing(listing): null;
+          listing.id == listingId2 ? setAcceptorListing(listing): null;
         });
       } catch (error) {
         console.error("Failed to fetch trade details:", error);
@@ -72,35 +76,35 @@ export default function InitiatorPendingTrade() {
     }
   };
 
-const handleCloseModal = () => setShowModal(false);
-const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
 
-const handleCancelTrade = async () => {
-  const response = await axios.delete(`${BACKEND_URL}/trades/delete-trade`, {
-    data: { tradeId: newTradeId },
-  });
-
-  if (response.data.success) {
-    console.log(response.data.msg);
-  } else {
-    console.error(response.data.msg);
-  }
-
-  axios
-    .put(`${BACKEND_URL}/listings/change-reserved-status`, {
-      newListingReservedStatus: false,
-      listingId: initiatorListing.id
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((err) => {
-      console.log(err);
+  const handleCancelTrade = async () => {
+    const response = await axios.delete(`${BACKEND_URL}/trades/delete-trade`, {
+      data: { tradeId: newTradeId },
     });
 
-  handleCloseModal();
-  navigate("/user-trades")
-};
+    if (response.data.success) {
+      console.log(response.data.msg);
+    } else {
+      console.error(response.data.msg);
+    }
+
+    axios
+      .put(`${BACKEND_URL}/listings/change-reserved-status`, {
+        newListingReservedStatus: false,
+        listingId: initiatorListing.id,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    handleCloseModal();
+    navigate("/user-trades");
+  };
 
   return (
     <div className="flex flex-col items-center py-1">

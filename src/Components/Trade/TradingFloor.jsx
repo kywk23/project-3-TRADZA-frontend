@@ -68,7 +68,6 @@ export default function TradingFloor({
       console.log(response);
       setTradeStateChanged(!tradeStateChanged);
     }
-    
   };
 
   return (
@@ -77,9 +76,9 @@ export default function TradingFloor({
         <h1 className="flex justify-center p-2">
           {user.firstName}'s Trading Bucket:{" "}
         </h1>
-        <div className="flex flex-col justify-center items-center border-black border-1 mx-2 h-56">
+        <div className="flex flex-col justify-center items-center rounded-xl bg-white border-black border-1 mx-2 h-56">
           {userTradeBucket.map((listing, index) => (
-            <div key={index}>
+            <div key={index} className="font-bold">
               {listing.name}
               <button
                 onClick={() => handleDelete(listing.id)}
@@ -102,9 +101,11 @@ export default function TradingFloor({
           {" "}
           {partner.firstName}'s Trading Bucket:{" "}
         </h1>
-        <div className="flex flex-col justify-center items-center border-black border-1 mx-2 h-56">
+        <div className="flex flex-col justify-center items-center rounded-xl bg-white border-black border-1 mx-2 h-56">
           {partnerTradeBucket.map((listing, index) => (
-            <div key={index}>{listing.name}</div>
+            <div key={index} className="font-bold">
+              {listing.name}
+            </div>
           ))}
         </div>
       </div>

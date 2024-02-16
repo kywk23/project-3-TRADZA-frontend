@@ -156,7 +156,7 @@ export default function TradeRoom() {
         <>
           <div className="flex justify-between w-full p-2 my-4">
             <div
-              className={`flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56 ${
+              className={`flex flex-col justify-center items-center border-black rounded-xl border-2 p-3 h-96 w-56 ${
                 (currUser === "initiator" &&
                   (initiatorAgreed || acceptorAgreed)) ||
                 (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
@@ -172,7 +172,7 @@ export default function TradeRoom() {
                 userListings={userListings}
               />
             </div>
-            <div className="flex flex-col bg-white justify-center items-center border-black border-2 p-3 h-96 w-96">
+            <div className="flex flex-col bg-white justify-center items-center rounded-xl border-black border-2 p-3 h-96 w-96">
               <h2 className="text-xl font-bold mb-2">Chatroom</h2>
               <ChatRoom
                 tradeId={tradeId}
@@ -181,7 +181,7 @@ export default function TradeRoom() {
               />
             </div>
             <div
-              className={`flex flex-col justify-center items-center border-black border-2 p-3 h-96 w-56 ${
+              className={`flex flex-col justify-center items-center border-black border-2 rounded-xl p-3 h-96 w-56 ${
                 (currUser === "initiator" &&
                   (initiatorAgreed || acceptorAgreed)) ||
                 (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
@@ -246,7 +246,7 @@ export default function TradeRoom() {
             </div>
           ) : null}
           <div
-            className={`flex flex-col justify-center items-center border-black border-2 w-full h-72 my-4 ${
+            className={`flex flex-col justify-center items-center bg-orange-200 rounded-xl border-black border-2 w-full h-72 my-4 ${
               (currUser === "initiator" &&
                 (initiatorAgreed || acceptorAgreed)) ||
               (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
@@ -298,11 +298,32 @@ export default function TradeRoom() {
   };
 
   const handleAcceptTrade = async () => {
+    const combinedBucket = [...userTradeBucket, ...partnerTradeBucket];
+
+    const listings = combinedBucket.map((obj) => {
+      const newListing = {
+        listingId: obj.id,
+        listingStatus: false,
+      };
+      return newListing;
+    });
+
+    console.log(listings)
+
     const updateState = await axios.put(`${BACKEND_URL}/trades/update-status`, {
       tradeId: tradeId,
       newTradeStatus: "Completed",
     });
-    console.log(updateState);
+
+    await axios
+      .put(`${BACKEND_URL}/listings/update-listing-statuses`, listings)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     setTradeStateChanged(!tradeStateChanged);
   };
 
@@ -316,6 +337,19 @@ export default function TradeRoom() {
       };
       return newListing;
     });
+
+    axios
+      .delete(`${BACKEND_URL}/messages/deleteTradeRoom`, {
+        data: {
+          tradeId: tradeId,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     const response = await axios.delete(`${BACKEND_URL}/trades/delete-trade`, {
       data: { tradeId: tradeId },

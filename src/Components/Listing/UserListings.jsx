@@ -13,12 +13,15 @@ function UserListings() {
 
   const getListingsByUserId = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/listings/user-listings`, {
-        params: {
-          userId: currentUserId,
-          listingStatus: true,
-        },
-      });
+      const response = await axios.get(
+        `${BACKEND_URL}/listings/user-listings`,
+        {
+          params: {
+            userId: currentUserId,
+            listingStatus: true,
+          },
+        }
+      );
       setListing(response.data);
       console.log(`res data`, response.data);
       return response.data;
@@ -115,8 +118,16 @@ function UserListings() {
         {listingAndImages.map((outerListing) => (
           <div
             key={outerListing.id}
-            className="card w-96 bg-base-100 shadow-xl image-full border-2 border-black first-line:"
+            className={`card w-96 bg-base-100 shadow-xl image-full border-2 border-black first-line ${
+              outerListing.reserved ? "pointer-events-none opacity-50" : ""
+            }`}
+            style={{ position: "relative" }}
           >
+            {outerListing.reserved ? (
+              <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-50 font-bold text-3xl text-white z-10">
+                Reserved
+              </div>
+            ) : null}
             {outerListing.images.map((url, index) => (
               <figure key={index}>
                 <img className="object-cover w-full h-full" src={url.url} />
@@ -129,7 +140,10 @@ function UserListings() {
               <br />
               <div className="card-actions justify-end">
                 {outerListing.categories.map((category) => (
-                  <div className="m-2 badge badge-outline  text-white" key={category.id}>
+                  <div
+                    className="m-2 badge badge-outline  text-white"
+                    key={category.id}
+                  >
                     {category.name
                       .split("_")
                       .map((word) => word.toUpperCase())
@@ -139,7 +153,9 @@ function UserListings() {
               </div>
               <br />
               <div className="card-actions justify-end">
-                <button className="btn btn-black text-white">Edit Or Delete Or View</button>
+                <button className="btn btn-black text-white">
+                  Edit Or Delete Or View
+                </button>
               </div>
             </div>
           </div>

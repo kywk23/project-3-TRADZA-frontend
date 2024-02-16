@@ -41,8 +41,8 @@ export default function AcceptorPendingTrade() {
         });
 
         acceptorListings.forEach((listing) => {
-          listing.id == listingId1 ? null : setAcceptorListing(listing);
-          listing.id == listingId2 ? null : setAcceptorListing(listing);
+          listing.id == listingId1 ? setAcceptorListing(listing) : null;
+          listing.id == listingId2 ? setAcceptorListing(listing) : null;
         });
       } catch (error) {
         console.error("Failed to fetch trade details:", error);
@@ -82,8 +82,9 @@ export default function AcceptorPendingTrade() {
       .put(`${BACKEND_URL}/listings/change-reserved-status`, {
         newListingReservedStatus: true,
         listingId: acceptorListing.id,
-      }).then((response) => {
-        console.log(response)
+      })
+      .then((response) => {
+        console.log(response);
       })
       .catch((err) => {
         console.log(err);
