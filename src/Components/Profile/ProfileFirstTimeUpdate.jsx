@@ -52,8 +52,19 @@ function ProfileFirstTimeUpdate() {
             },
           }
         );
-        // UPLOAD A PLACEHOLDER/DEFAULT DP FOR USERS to postgre
-        // const uploadDefaultDP = await axios.post;
+        console.log(`Response:`, response.data.id);
+        const uploadDefaultDP = await axios.post(
+          `${BACKEND_URL}/images/displaypictures/${response.data.id}`,
+          {
+            userDpUrl:
+              "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         console.log(`Response:`, response.data);
         console.log(firstName, lastName, mobileNumber);
         setFirstName("");
