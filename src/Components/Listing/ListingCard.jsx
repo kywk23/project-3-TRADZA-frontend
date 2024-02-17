@@ -11,8 +11,7 @@ export default function ListingCard({ listing }) {
         .join(" ")
     : null;
 
-  const displayPictureUrl =
-    listing.listing_display_pictures[0]?.url || Electronics;
+  const displayPictureUrl = listing.listing_display_pictures[0]?.url || Electronics;
 
   return (
     <>
@@ -29,7 +28,7 @@ export default function ListingCard({ listing }) {
           </div>
         ) : null}
         <figure>
-          <img src={displayPictureUrl} alt="elect" />
+          <img src={displayPictureUrl} />
         </figure>
         <div className="card-body">
           <h2 className="card-title text-2xl">
