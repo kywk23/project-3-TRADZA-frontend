@@ -22,9 +22,7 @@ export default function InitiatorPendingTrade() {
         const initiatorId = response.data.listingInitiator;
         const acceptorId = response.data.listingAcceptor;
 
-        const listingsByTrade = await axios.get(
-          `${BACKEND_URL}/listingsTrades/${newTradeId}`
-        );
+        const listingsByTrade = await axios.get(`${BACKEND_URL}/listingsTrades/${newTradeId}`);
 
         const listingId1 = listingsByTrade.data[0].listingId;
         const listingId2 = listingsByTrade.data[1].listingId;
@@ -40,13 +38,13 @@ export default function InitiatorPendingTrade() {
         initiatorListings.forEach((listing) => {
           console.log("Comparing:", listing.id, listingId1);
           console.log("Comparing:", listing.id, listingId2);
-          listing.id == listingId1 ? setInitiatorListing(listing)  : null;
+          listing.id == listingId1 ? setInitiatorListing(listing) : null;
           listing.id == listingId2 ? setInitiatorListing(listing) : null;
         });
 
         acceptorListings.forEach((listing) => {
-          listing.id == listingId1 ? setAcceptorListing(listing): null;
-          listing.id == listingId2 ? setAcceptorListing(listing): null;
+          listing.id == listingId1 ? setAcceptorListing(listing) : null;
+          listing.id == listingId2 ? setAcceptorListing(listing) : null;
         });
       } catch (error) {
         console.error("Failed to fetch trade details:", error);
@@ -60,15 +58,12 @@ export default function InitiatorPendingTrade() {
 
   const getListingsByUserId = async (userId) => {
     try {
-      const response = await axios.get(
-        `${BACKEND_URL}/listings/user-listings`,
-        {
-          params: {
-            userId: userId,
-            listingStatus: true,
-          },
-        }
-      );
+      const response = await axios.get(`${BACKEND_URL}/listings/user-listings`, {
+        params: {
+          userId: userId,
+          listingStatus: true,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching listings:", error);
@@ -108,24 +103,20 @@ export default function InitiatorPendingTrade() {
 
   return (
     <div className="flex flex-col items-center py-1">
-      <h1 className="text-3xl my-4">Pending Trade</h1>
-      <div className="flex flex-col items-center max-w-4xl mx-auto p-5 bg-gray-200 rounded-lg shadow">
-        <div className="text-3xl p-2 my-4">Trade ID: </div>
-        <div>{tradeDetails.id}</div>
-        <div className="text-3xl p-2 my-4">
-          Status: Waiting for User {tradeDetails.listingAcceptor} to accept...
+      <div className="flex flex-col items-center max-w-4xl mx-auto p-5 bg-black text-white rounded-lg shadow">
+        <div className=" text-xl my-4">
+          STATUS: Waiting for
+          <span className="text-orange-500"> User {tradeDetails.listingAcceptor}</span> to accept .
+          .
         </div>
-        <div className="text-3xl p-2 my-4">You want this: </div>
+        <div className="text-sm p-2 my-4">You want: </div>
         {console.log(acceptorListing)}
-        <div>{acceptorListing.name}</div>
-        <div className="text-3xl p-2 my-4">You are offering this: </div>
+        <div className="text-2xl text-orange-500">{acceptorListing.name}</div>
+        <div className="text-sm p-2 my-4">You are offering: </div>
         {console.log(initiatorListing)}
-        <div>{initiatorListing.name}</div>
+        <div className="text-2xl text-orange-500">{initiatorListing.name}</div>
       </div>
-      <Button
-        style={{ margin: "1rem", backgroundColor: "darkcyan" }}
-        onClick={handleShowModal}
-      >
+      <Button style={{ margin: "1rem", backgroundColor: "darkcyan" }} onClick={handleShowModal}>
         Cancel Trade
       </Button>
 

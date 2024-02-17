@@ -99,16 +99,16 @@ export default function InitiateTrade() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-col justify-center items-center max-w-4xl bg-gray-200 p-4 my-4 rounded-lg shadow">
-        <h1 className="text-3xl my-4">Trade Initiation</h1>
-        <div className="text-3xl p-2 my-4">You want this: </div>
-        <div>{wantedListing.name}</div>
-        <div className="text-3xl p-2 my-4">What would you offer in return?</div>
+      <div className="flex flex-col justify-center items-center max-w-4xl bg-black text-white p-4 my-4 rounded-lg shadow">
+        <h1 className="text-xl my-4">TRADE INITIATION</h1>
+        <div className="text-sm p-2 my-4">You want: </div>
+        <div className="text-2xl text-orange-500">{wantedListing.name}</div>
+        <div className="text-sm p-2 my-4">What will you offer?</div>
         <div className="flex flex-col">
           {offeredListings.map((listing, index) => (
             <button
               className={`text-xl my-2 p-3 rounded-md ${
-                activeIndex === index ? "bg-pink-500" : "bg-pink-300"
+                activeIndex === index ? "bg-orange-500" : "bg-gray-400"
               }`}
               key={index}
               onClick={() => handleChooseTradeClick(index)}
@@ -118,18 +118,16 @@ export default function InitiateTrade() {
           ))}
         </div>
         <div className="flex my-2">
-          <Button
-            style={{ margin: "1rem", backgroundColor: "darkcyan" }}
+          <button
+            className="btn btn-success"
+            style={{ margin: "1rem" }}
             onClick={handleInitiateTrade}
           >
             Initiate Trade
-          </Button>
-          <Button
-            style={{ margin: "1rem", backgroundColor: "darkcyan" }}
-            onClick={handleCancelTrade}
-          >
+          </button>
+          <button className="btn btn-error" style={{ margin: "1rem" }} onClick={handleCancelTrade}>
             Cancel Trade
-          </Button>
+          </button>
         </div>
       </div>
     </div>

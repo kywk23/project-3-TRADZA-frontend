@@ -17,9 +17,10 @@ export default function AllUserTrades() {
   const [ongoingTrades, setOngoingTrades] = useState([]);
   const [pendingCompletedTrades, setPendingCompletedTrades] = useState([]);
   const [completedTrades, setCompletedTrades] = useState([]);
-  const [value, setValue] = useState("");
-  const [pendingTradesCount, setPendingTradesCount] = useState(0);
-
+  const [value, setValue] = useState("1");
+  const [pendingTradesLiCount, setPendingTradesLiCount] = useState(0);
+  const [ongoingTradesLiCount, setOngoingTradesLiCount] = useState(0);
+  const [completedTradesLiCount, setCompletedTradesLiCount] = useState(0);
   const { currentUser } = useUserId();
   const userId = currentUser.id;
 
@@ -90,9 +91,12 @@ export default function AllUserTrades() {
   };
 
   useEffect(() => {
-    const pendingTradesLiCount = document.querySelectorAll("#pendingTradesTab li").length;
-    console.log(`li count`, pendingTradesLiCount);
-    setPendingTradesCount(pendingTradesLiCount);
+    const pendingTradesLiCount = document.querySelectorAll("#pendingTradesLiTab li").length;
+    const ongoingTradesLiCount = document.querySelectorAll("#ongoingTradesLiTab li").length;
+    const completedTradesLiCount = document.querySelectorAll("#completedTradesLiTab li").length;
+    setPendingTradesLiCount(pendingTradesLiCount);
+    setOngoingTradesLiCount(ongoingTradesLiCount);
+    setCompletedTradesLiCount(completedTradesLiCount);
   }, [value]);
 
   return (
@@ -100,73 +104,90 @@ export default function AllUserTrades() {
       <Box className="p-4 bg-black rounded-xl text-white" sx={{ width: "80%", mx: "auto", mt: 4 }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleTabChange} aria-label="lab API tabs example">
-              {/* Use the Badge component to display the count */}
+            <TabList onChange={handleTabChange}>
               <Tab
                 className="text-white"
                 label={
-                  <Badge
-                    badgeContent={pendingTradesCount > 0 ? pendingTradesCount : ""}
-                    color="error"
-                  >
+                  <Badge badgeContent={pendingTradesLiCount} color="error">
                     Pending Trades
                   </Badge>
                 }
                 value="1"
               />
-              <Tab className="text-white" label="Ongoing Trades" value="2" />
-              <Tab className="text-white" label="Completed Trades" value="3" />
+              <Tab
+                className="text-white"
+                label={
+                  <Badge badgeContent={ongoingTradesLiCount} color="primary">
+                    Ongoing Trades
+                  </Badge>
+                }
+                value="2"
+              />
+              <Tab
+                className="text-white"
+                label={
+                  <Badge badgeContent={completedTradesLiCount} color="success">
+                    Completed Trades
+                  </Badge>
+                }
+                value="3"
+              />
             </TabList>
           </Box>
-          <TabPanel id="pendingTradesTab" value="1">
-            <li>Item One</li>
-          </TabPanel>
-          <TabPanel value="2">Item Two</TabPanel>
-          <TabPanel value="3">Item Three</TabPanel>
-        </TabContext>
-      </Box>
-
-      <div className="flex justify-evenly px-6">
-        <div className="flex flex-col justify-center items-center max-w-4xl bg-gray-200 p-4 my-4 rounded-lg shadow">
-          <h1 className="text-3xl my-4">Pending Trades</h1>
-          <div className="border-black border-2 p-3 h-96 w-96">
+          <TabPanel id="pendingTradesLiTab" value="1">
             {pendingInitiatorTrades.map((trade, index) => (
               <div key={index}>
-                <Link to={`/user-trades/pending/initiator?trade=${trade.id}`}>
-                  Trade ID {trade.id} - Waiting for {trade.listingAcceptor} to accept!
-                </Link>
+                <li>
+                  {" "}
+                  <Link
+                    className="link link-hover"
+                    to={`/user-trades/pending/initiator?trade=${trade.id}`}
+                  >
+                    Trade No.: {trade.id} - Awaiting
+                    <span className="text-orange-500"> {trade.listingAcceptor} </span> to accept the
+                    trade.
+                  </Link>
+                </li>
               </div>
             ))}
             {pendingAcceptorTrades.map((trade, index) => (
               <div key={index}>
-                <Link to={`/user-trades/pending/acceptor?trade=${trade.id}`}>
-                  Trade ID {trade.id} - Waiting for you to accept!
-                </Link>
+                <li>
+                  {" "}
+                  <Link
+                    className="link link-hover"
+                    to={`/user-trades/pending/acceptor?trade=${trade.id}`}
+                  >
+                    Trade No.: {trade.id} - Awaiting your confirmation.
+                  </Link>
+                </li>
               </div>
             ))}
-          </div>
-        </div>
-        <div className="flex flex-col justify-center items-center max-w-4xl bg-gray-200 p-4 my-4 rounded-lg shadow">
-          <h1 className="text-3xl my-4">Ongoing Trades</h1>
-          <div className="border-black border-2 p-3 h-96 w-96">
+          </TabPanel>
+          <TabPanel id="ongoingTradesLiTab" value="2">
             {ongoingTrades.map((trade, index) => (
               <div key={index}>
-                <Link to={`/traderoom/${trade.id}`}>Trade ID {trade.id}</Link>
+                <li>
+                  <Link className="link link-hover" to={`/traderoom/${trade.id}`}>
+                    Trade No.: {trade.id}
+                  </Link>
+                </li>
               </div>
             ))}
-          </div>
-        </div>
-        <div className="flex flex-col justify-center items-center max-w-4xl bg-gray-200 p-4 my-4 rounded-lg shadow">
-          <h1 className="text-3xl my-4">Completed Trades</h1>
-          <div className="border-black border-2 p-3 h-96 w-96">
+          </TabPanel>
+          <TabPanel id="completedTradesLiTab" value="3">
             {completedTrades.map((trade, index) => (
               <div key={index}>
-                <Link to={`/traderoom/${trade.id}`}>Trade ID {trade.id}</Link>
+                <li>
+                  <Link className="link link-hover" to={`/traderoom/${trade.id}`}>
+                    Trade No.:{trade.id}
+                  </Link>
+                </li>
               </div>
             ))}
-          </div>
-        </div>
-      </div>
+          </TabPanel>
+        </TabContext>
+      </Box>
     </>
   );
 }
