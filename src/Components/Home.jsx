@@ -103,11 +103,11 @@ export default function Home() {
           ? null
           : !isAuthenticated && (
               <div className="flex m-5 gap-8 items-center max-w-screen-xl ">
-                <div className="flex-1 btn btn-black">
+                <div className="flex-1 ">
                   <AuthenticationButton />
                 </div>
                 <div className="flex-1 ">
-                  <p className="text-xs italic ">No Account?</p>
+                  <p className="text-xs italic text-orange-500 ">No Account?</p>
                   <SignUpButton />
                 </div>
               </div>

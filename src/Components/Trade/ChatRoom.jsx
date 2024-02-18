@@ -64,16 +64,14 @@ export default function ChatRoom({ tradeId, currUser, currPartner }) {
 
   return (
     <>
-      <div className="mb-4 w-full" style={{ overflowY: "auto" }}>
+      <div className="mb-4 w-full overflow-y-auto scrollbar">
         <div className="space-y-2">
           {messages.map((message, index) => (
             <>
               <div
                 key={index}
                 className={`p-1 m-1 rounded-lg ${
-                  message.senderId === currUser.id
-                    ? "bg-blue-100 text-right"
-                    : "bg-green-100 text-left"
+                  message.senderId === currUser.id ? "bg-blue-500 text-right" : "bg-black text-left"
                 }`}
               >
                 {message.senderId == currUser.id ? (
@@ -94,16 +92,11 @@ export default function ChatRoom({ tradeId, currUser, currPartner }) {
         </div>
       </div>
       <div>
-        {isTyping ? (
-          <p className="text-sm italic text-gray-600">Someone is typing...</p>
-        ) : null}
-        <form
-          onSubmit={emitSocketMessage}
-          className="flex items-center space-x-2"
-        >
+        {isTyping ? <p className="text-sm italic text-gray-600">Someone is typing...</p> : null}
+        <form onSubmit={emitSocketMessage} className="flex items-center space-x-2 text-black">
           <input
             type="text"
-            placeholder="message"
+            placeholder="Say Hi! "
             value={messageInput}
             onChange={(e) => {
               socket.emit("typing", true);
@@ -114,7 +107,7 @@ export default function ChatRoom({ tradeId, currUser, currPartner }) {
           <input
             type="submit"
             value="Send"
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer"
+            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer"
           />
         </form>
       </div>

@@ -15,16 +15,10 @@ export default function TradingFloor({
 }) {
   const handleDelete = async (listingId) => {
     try {
-      const listingsByTrade = await axios.get(
-        `${BACKEND_URL}/listingsTrades/${tradeId}`
-      );
+      const listingsByTrade = await axios.get(`${BACKEND_URL}/listingsTrades/${tradeId}`);
       const currentListings = listingsByTrade.data;
-      const listingTradeId = currentListings.find(
-        (listing) => listing.listingId === listingId
-      ).id;
-      const response = await axios.delete(
-        `${BACKEND_URL}/listingsTrades/${listingTradeId}`
-      );
+      const listingTradeId = currentListings.find((listing) => listing.listingId === listingId).id;
+      const response = await axios.delete(`${BACKEND_URL}/listingsTrades/${listingTradeId}`);
 
       axios
         .put(`${BACKEND_URL}/listings/change-reserved-status`, {
@@ -58,13 +52,10 @@ export default function TradingFloor({
     }
 
     if (initiatorAgreed == false && acceptorAgreed == false) {
-      const response = await axios.put(
-        `${BACKEND_URL}/trades/update-agree-status`,
-        {
-          tradeId: tradeId,
-          whoAgreed: updateAgreedPerson,
-        }
-      );
+      const response = await axios.put(`${BACKEND_URL}/trades/update-agree-status`, {
+        tradeId: tradeId,
+        whoAgreed: updateAgreedPerson,
+      });
       console.log(response);
       setTradeStateChanged(!tradeStateChanged);
     }
@@ -73,16 +64,14 @@ export default function TradingFloor({
   return (
     <div className="flex w-full items-center">
       <div className="flex-1">
-        <h1 className="flex justify-center p-2">
-          {user.firstName}'s Trading Bucket:{" "}
-        </h1>
-        <div className="flex flex-col justify-center items-center rounded-xl bg-white border-black border-1 mx-2 h-56">
+        <h1 className="flex justify-center p-2">{user.firstName}'s Trading Bucket: </h1>
+        <div className="flex flex-col justify-center items-center rounded-xl bg-white border-black text-black border-1 mx-2 h-56">
           {userTradeBucket.map((listing, index) => (
-            <div key={index} className="font-bold">
+            <div key={index} className="font-bold p-2">
               {listing.name}
               <button
                 onClick={() => handleDelete(listing.id)}
-                className="mx-3 py-1 px-2 bg-red-500 text-white hover:bg-red-700"
+                className="mx-3 py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded"
               >
                 Delete
               </button>
@@ -91,16 +80,13 @@ export default function TradingFloor({
         </div>
       </div>
       <div
-        className="flex flex-1 justify-center items-center border-black border-1 mx-2 h-12 bg-slate-100 text-blue-500 cursor-pointer"
+        className="flex flex-1 justify-center items-center border-black rounded border-1 mx-2 h-12 bg-slate-100 text-orange-500 cursor-pointer"
         onClick={handleReadyToTrade}
       >
         I'm Ready to Trade!
       </div>
       <div className="flex-1">
-        <h1 className="flex justify-center p-2">
-          {" "}
-          {partner.firstName}'s Trading Bucket:{" "}
-        </h1>
+        <h1 className="flex justify-center p-2"> {partner.firstName}'s Trading Bucket: </h1>
         <div className="flex flex-col justify-center items-center rounded-xl bg-white border-black border-1 mx-2 h-56">
           {partnerTradeBucket.map((listing, index) => (
             <div key={index} className="font-bold">

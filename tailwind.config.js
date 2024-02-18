@@ -3,8 +3,8 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/flowbite/**/*.{js,jsx,ts,tsx}",
-    "node_modules/flowbite-react/lib/esm/**/*.js",
+    // "./node_modules/flowbite/**/*.{js,jsx,ts,tsx}",
+    // "node_modules/flowbite-react/lib/esm/**/*.js",
   ],
   theme: {
     extend: {
@@ -13,9 +13,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require("daisyui"),
-    require("@tailwindcss/forms"),
-    require("flowbite/plugin"),
-  ],
+  plugins: [require("daisyui"), require("@tailwindcss/forms"), require("flowbite/plugin")],
 };

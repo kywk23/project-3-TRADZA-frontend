@@ -5,14 +5,14 @@ const LogInButton = () => {
 
   return (
     <button
-      className="btn btn-primary btn-block"
+      className="bg-green-500 p-2 px-4 m-2 rounded-xl text-white w-32 h-10"
       onClick={() =>
         loginWithRedirect({
           redirectUri: `${window.location.origin}/home`,
         })
       }
     >
-      Log In
+      LOG IN
     </button>
   );
 };
