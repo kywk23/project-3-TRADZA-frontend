@@ -5,7 +5,7 @@ const SignUpButton = () => {
 
   return (
     <button
-      className="btn btn-primary btn-block"
+      className="bg-orange-500 p-2 px-4 m-2 rounded-xl text-white"
       onClick={() =>
         loginWithRedirect({
           authorizationParams: {
@@ -15,7 +15,7 @@ const SignUpButton = () => {
         })
       }
     >
-      Sign Up
+      SIGN UP
     </button>
   );
 };

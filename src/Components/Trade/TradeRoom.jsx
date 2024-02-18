@@ -46,10 +46,8 @@ export default function TradeRoom() {
             setCurrUser("acceptor");
           }
 
-          const listingsInitiatorPromise =
-            getListingsByUserId(listingInitiatorId);
-          const listingsAcceptorPromise =
-            getListingsByUserId(listingAcceptorId);
+          const listingsInitiatorPromise = getListingsByUserId(listingInitiatorId);
+          const listingsAcceptorPromise = getListingsByUserId(listingAcceptorId);
 
           const [initiatorListings, acceptorListings] = await Promise.all([
             listingsInitiatorPromise,
@@ -72,9 +70,7 @@ export default function TradeRoom() {
           initiatorDetails.displayPicture = getInitiatorDP.data[0].userDpUrl;
           acceptorDetails.displayPicture = getAcceptorDP.data[0].userDpUrl;
 
-          const listingsByTrade = await axios.get(
-            `${BACKEND_URL}/listingsTrades/${tradeId}`
-          );
+          const listingsByTrade = await axios.get(`${BACKEND_URL}/listingsTrades/${tradeId}`);
           const tradeBucket = listingsByTrade.data;
           const initiatorTrades = [];
           const acceptorTrades = [];
@@ -121,15 +117,12 @@ export default function TradeRoom() {
 
   const getListingsByUserId = async (userId) => {
     try {
-      const response = await axios.get(
-        `${BACKEND_URL}/listings/user-listings`,
-        {
-          params: {
-            userId: userId,
-            listingStatus: true,
-          },
-        }
-      );
+      const response = await axios.get(`${BACKEND_URL}/listings/user-listings`, {
+        params: {
+          userId: userId,
+          listingStatus: true,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching listings:", error);
@@ -156,9 +149,8 @@ export default function TradeRoom() {
         <>
           <div className="flex justify-between w-full p-2 my-4">
             <div
-              className={`flex flex-col justify-center items-center border-black rounded-xl border-2 p-3 h-96 w-56 ${
-                (currUser === "initiator" &&
-                  (initiatorAgreed || acceptorAgreed)) ||
+              className={`flex flex-col justify-center items-center border-white rounded-xl  border-3 p-3 h-96 w-72 ${
+                (currUser === "initiator" && (initiatorAgreed || acceptorAgreed)) ||
                 (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
                   ? "pointer-events-none opacity-50"
                   : ""
@@ -172,18 +164,13 @@ export default function TradeRoom() {
                 userListings={userListings}
               />
             </div>
-            <div className="flex flex-col bg-white justify-center items-center rounded-xl border-black border-2 p-3 h-96 w-96">
+            <div className="flex flex-col bg-white justify-center items-center rounded-xl border-white border-3 p-3 h-96 w-96">
               <h2 className="text-xl font-bold mb-2">Chatroom</h2>
-              <ChatRoom
-                tradeId={tradeId}
-                currUser={user}
-                currPartner={partner}
-              />
+              <ChatRoom tradeId={tradeId} currUser={user} currPartner={partner} />
             </div>
             <div
-              className={`flex flex-col justify-center items-center border-black border-2 rounded-xl p-3 h-96 w-56 ${
-                (currUser === "initiator" &&
-                  (initiatorAgreed || acceptorAgreed)) ||
+              className={`flex flex-col justify-center items-center border-white rounded-xl  border-3 p-3 h-96 w-72 ${
+                (currUser === "initiator" && (initiatorAgreed || acceptorAgreed)) ||
                 (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
                   ? "pointer-events-none opacity-50"
                   : ""
@@ -198,17 +185,17 @@ export default function TradeRoom() {
             </div>
           </div>
           {currUser == "initiator" && initiatorAgreed ? (
-            <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+            <div className="flex flex-col justify-center items-center bg-white text-black p-4 rounded-lg shadow-lg">
               <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
               <p>Awaiting User {acceptorId} to accept...</p>
             </div>
           ) : null}
           {currUser == "initiator" && acceptorAgreed ? (
-            <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+            <div className="flex flex-col justify-center items-center bg-white  text-black p-4 rounded-lg shadow-lg">
               <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
               <p>Waiting for you to accept...</p>
               <button
-                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="mt-4  bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 onClick={handleAcceptTrade}
               >
                 Accept Trade
@@ -222,23 +209,23 @@ export default function TradeRoom() {
             </div>
           ) : null}
           {currUser == "acceptor" && acceptorAgreed ? (
-            <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
-              <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
+            <div className="flex flex-col justify-center items-center bg-whitep-4 rounded-lg shadow-lg">
+              <h2 className="text-lg font-bold  text-black ">Trade Room is Locked!</h2>
               <p>Awaiting User {initiatorId} to accept...</p>
             </div>
           ) : null}
           {currUser == "acceptor" && initiatorAgreed ? (
-            <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg shadow-lg">
+            <div className="flex flex-col justify-center items-center bg-white text-black p-4 rounded-lg shadow-lg">
               <h2 className="text-lg font-bold">Trade Room is Locked!</h2>
               <p>Waiting for you to accept...</p>
               <button
-                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="mt-4 bg-green-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded"
                 onClick={handleAcceptTrade}
               >
                 Accept Trade
               </button>
               <button
-                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded"
                 onClick={handleUnlockAndEdit}
               >
                 Unlock Trade and Edit
@@ -246,9 +233,8 @@ export default function TradeRoom() {
             </div>
           ) : null}
           <div
-            className={`flex flex-col justify-center items-center bg-orange-200 rounded-xl border-black border-2 w-full h-72 my-4 ${
-              (currUser === "initiator" &&
-                (initiatorAgreed || acceptorAgreed)) ||
+            className={`flex flex-col justify-center items-center bg-black rounded-xl border-white border-2 w-full h-72 my-4 ${
+              (currUser === "initiator" && (initiatorAgreed || acceptorAgreed)) ||
               (currUser === "acceptor" && (acceptorAgreed || initiatorAgreed))
                 ? "pointer-events-none opacity-50"
                 : ""
@@ -268,10 +254,7 @@ export default function TradeRoom() {
             />
           </div>
 
-          <div
-            className="border-black border-1 mx-2 p-3 cursor-pointer"
-            onClick={handleShowModal}
-          >
+          <div className="border-black border-1 mx-2 p-3 cursor-pointer" onClick={handleShowModal}>
             Cancel Trade
           </div>
         </>
@@ -375,8 +358,10 @@ export default function TradeRoom() {
   };
 
   return (
-    <div className="flex flex-col items-center mx-auto max-w-6xl p-5 bg-gray-200 my-4 rounded-lg shadow">
-      <h1 className="text-3xl">Trade Room</h1>
+    <div className="flex flex-col items-center mx-auto max-w-7xl p-5 bg-black text-white my-4 rounded-lg shadow">
+      <h1 className="text-3xl">
+        <sTRONG>TRADE ROOM</sTRONG>
+      </h1>
 
       {renderBasedOnTradeStatus(tradeStatus)}
 
@@ -385,12 +370,10 @@ export default function TradeRoom() {
           <Modal.Title>Are you sure you want to cancel trade?</Modal.Title>
         </Modal.Header>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleCancelTrade}>
+          <Button variant="error" onClick={handleCancelTrade}>
             Cancel Trade
           </Button>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
+          <Button onClick={handleCloseModal}>Close</Button>
         </Modal.Footer>
       </Modal>
     </div>
