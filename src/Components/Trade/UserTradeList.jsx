@@ -66,7 +66,6 @@ export default function UserTradeList({
               onClick={() => handleClick(index)}
             >
               {listing.name}
-              {console.log(listing)}
             </div>
           ) : null
         )}
