@@ -308,7 +308,7 @@ export default function TradeRoom() {
       return newListing;
     });
 
-    console.log(listings)
+    console.log(listings);
 
     const updateState = await axios.put(`${BACKEND_URL}/trades/update-status`, {
       tradeId: tradeId,
