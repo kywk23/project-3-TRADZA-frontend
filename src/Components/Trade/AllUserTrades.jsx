@@ -91,15 +91,9 @@ export default function AllUserTrades() {
   };
 
   useEffect(() => {
-    const pendingTradesLiCount = document.querySelectorAll(
-      "#pendingTradesLiTab li"
-    ).length;
-    const ongoingTradesLiCount = document.querySelectorAll(
-      "#ongoingTradesLiTab li"
-    ).length;
-    const completedTradesLiCount = document.querySelectorAll(
-      "#completedTradesLiTab li"
-    ).length;
+    const pendingTradesLiCount = document.querySelectorAll("#pendingTradesLiTab li").length;
+    const ongoingTradesLiCount = document.querySelectorAll("#ongoingTradesLiTab li").length;
+    const completedTradesLiCount = document.querySelectorAll("#completedTradesLiTab li").length;
     setPendingTradesLiCount(pendingTradesLiCount);
     setOngoingTradesLiCount(ongoingTradesLiCount);
     setCompletedTradesLiCount(completedTradesLiCount);
@@ -107,10 +101,7 @@ export default function AllUserTrades() {
 
   return (
     <>
-      <Box
-        className="p-4 bg-black rounded-xl text-white"
-        sx={{ width: "80%", mx: "auto", mt: 4 }}
-      >
+      <Box className="p-4 bg-black rounded-xl text-white" sx={{ width: "80%", mx: "auto", mt: 4 }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleTabChange}>
@@ -152,12 +143,10 @@ export default function AllUserTrades() {
                     className="link link-hover"
                     to={`/user-trades/pending/initiator?trade=${trade.id}`}
                   >
+                    {console.log(`trade`, trade)}
                     Trade No.: {trade.id} - Awaiting
-                    <span className="text-orange-500">
-                      {" "}
-                      {trade.Acceptor.firstName}{" "}
-                    </span>{" "}
-                    to accept the trade.
+                    <span className="text-orange-500"> {trade.Acceptor.firstName} </span> to accept
+                    the trade.
                   </Link>
                 </li>
               </div>
@@ -180,18 +169,10 @@ export default function AllUserTrades() {
             {ongoingTrades.map((trade, index) => (
               <div key={index}>
                 <li>
-                  <Link
-                    className="link link-hover"
-                    to={`/traderoom/${trade.id}`}
-                  >
+                  <Link className="link link-hover" to={`/traderoom/${trade.id}`}>
                     Trade No. {trade.id} -{" "}
-                    <span className="text-orange-500">
-                      {trade.Initiator.firstName}
-                    </span>{" "}
-                    &{" "}
-                    <span className="text-orange-500">
-                      {trade.Acceptor.firstName}
-                    </span>
+                    <span className="text-orange-500">{trade.Initiator.firstName}</span> &{" "}
+                    <span className="text-orange-500">{trade.Acceptor.firstName}</span>
                   </Link>
                 </li>
               </div>
@@ -201,10 +182,7 @@ export default function AllUserTrades() {
             {completedTrades.map((trade, index) => (
               <div key={index}>
                 <li>
-                  <Link
-                    className="link link-hover"
-                    to={`/traderoom/${trade.id}`}
-                  >
+                  <Link className="link link-hover" to={`/traderoom/${trade.id}`}>
                     Trade No.:{trade.id}
                   </Link>
                 </li>
