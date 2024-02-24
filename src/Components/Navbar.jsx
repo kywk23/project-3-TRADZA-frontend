@@ -23,35 +23,34 @@ function Navbar() {
               <li>
                 <a href="/home">Home</a>
               </li>
-              {isAuthenticated && (
-                <>
-                  <li>
-                    <details>
-                      <summary>
-                        <a>Trades</a>
-                      </summary>
-                      <ul className="p-2 bg-black rounded-t-none text-sm w-48">
-                        <li>
-                          <a href="/browse-listings">Browse</a>
-                        </li>
-                        <li>
-                          <a href="/user-trades">My Trades</a>
-                        </li>
 
-                        <li>
-                          <a href="/mylistings">My Listings</a>
-                        </li>
-                        <li>
-                          <a href="/add-listing">Add Listing</a>
-                        </li>
-                      </ul>
-                    </details>
-                  </li>
-                  <li>
-                    <a href="/profile">Profile</a>
-                  </li>
-                </>
-              )}
+              <>
+                <li>
+                  <details>
+                    <summary>
+                      <a>Trades</a>
+                    </summary>
+                    <ul className="p-2 bg-black rounded-t-none text-sm w-48">
+                      <li>
+                        <a href="/browse-listings">Browse</a>
+                      </li>
+                      <li>
+                        <a href="/user-trades">My Trades</a>
+                      </li>
+
+                      <li>
+                        <a href="/mylistings">My Listings</a>
+                      </li>
+                      <li>
+                        <a href="/add-listing">Add Listing</a>
+                      </li>
+                    </ul>
+                  </details>
+                </li>
+                <li>
+                  <a href="/profile">Profile</a>
+                </li>
+              </>
             </ul>
           </div>
         </div>
