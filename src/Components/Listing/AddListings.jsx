@@ -36,6 +36,7 @@ export default function AddListings() {
   useEffect(() => {
     axios.get(`${BACKEND_URL}/categories`).then((response) => {
       setAllCategories(response.data);
+      console.log(response.data);
     });
   }, []);
 
